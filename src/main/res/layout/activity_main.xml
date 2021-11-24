@@ -2,19 +2,42 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/testCL"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
+    <HorizontalScrollView
+        android:id="@+id/allTrains"
+        android:layout_width="367dp"
+        android:layout_height="54dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="150dp">
+
+        <LinearLayout
+            android:id="@+id/allTrainsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </HorizontalScrollView>
 
     <TableLayout
         android:id="@+id/playerHand"
         android:layout_width="334dp"
         android:layout_height="99dp"
-        android:layout_marginBottom="236dp"
+        android:layout_marginBottom="404dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/humanHandLabel"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TableRow
+            android:id="@+id/testRow5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TableRow
             android:id="@+id/playerHandRow1"
@@ -36,27 +59,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <TableRow
-            android:id="@+id/testRow5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
     </TableLayout>
 
-    <HorizontalScrollView
-        android:id="@+id/allTrains"
-        android:layout_width="367dp"
-        android:layout_height="54dp"
-        app:layout_constraintBottom_toTopOf="@+id/playerHand"
+    <TextView
+        android:id="@+id/trains"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:text="Trains:"
+        app:layout_constraintBottom_toTopOf="@+id/allTrains"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625">
+        app:layout_constraintVertical_bias="1.0" />
 
-        <LinearLayout
-            android:id="@+id/allTrainsLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </HorizontalScrollView>
+    <TextView
+        android:id="@+id/humanHandLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Human Hand:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allTrains" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

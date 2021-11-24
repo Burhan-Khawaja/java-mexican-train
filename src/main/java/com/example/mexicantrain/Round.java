@@ -4,26 +4,46 @@ import android.app.Activity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 
 public class Round {
     //mexican train
     //boneyard
 
+    //CLASS VARIABLES
     private Hand boneyard = new Hand();
+    private Train mexicanTrain = new Train();
     private Human humanPlayer = new Human(this.activity);
     //private Computer computerPlayer = new Computer(this.activity);
     private Activity activity;
 
+
+    private int engineInt;
+
+    private Queue<Integer> engineQueue = new ArrayDeque<Integer>();
+    private boolean humanTurn;
+    private boolean computerTurn;
+    private boolean computerWon;
+    private boolean humanWon;
+
+    //CONSTRUCTOR
     Round(Activity activity) {
         this.activity = activity;
         //set activity through a setter b/c if we use constructor, then this.activity is not initialized,
         // and we set it to a null value in other classes.
         humanPlayer.setActivity(this.activity);
+
     }
 
+//================================//================================//================================//================================
+    //SELECTORS
 
+    //MUTATORS
+
+    //HELPER FUNCTIONS
     /**
      * create a double nine set of tiles, as well as shuffle the tiles and deal the tiles to the human and computer player.
      */
@@ -71,13 +91,6 @@ public class Round {
     }
 
     /**
-     * Display the human players hand to the screen.
-     */
-    public void displayHumanHand(){
-        humanPlayer.displayHand();
-    }
-
-    /**
      * Displays the current state of the game, including human and player hands and trains
      * and top of boneyard
      */
@@ -97,5 +110,78 @@ public class Round {
 
         allTrains.addView(humanTrainValues);
 
+        humanPlayer.displayHand();
     }
+
+    /**
+     * reset the queue of engine tiles to be 9-0 descending.
+     */
+    public void resetEngineQueue() {
+        this.engineQueue.clear();
+        //is there a better way of doing this? probably. Just refactor it later lol.
+        //at the very least its a simple and understandable solution. just add 9-0 to the queue one at a time.
+        this.engineQueue.add(9);
+        this.engineQueue.add(8);
+        this.engineQueue.add(7);
+        this.engineQueue.add(6);
+        this.engineQueue.add(5);
+        this.engineQueue.add(4);
+        this.engineQueue.add(3);
+        this.engineQueue.add(2);
+        this.engineQueue.add(1);
+        this.engineQueue.add(0);
+
+    }
+
+    /**
+     * get the next value in the queue of engine values
+     * @return integer value that is the next engine value
+     */
+    public int getNextEngineValue() {
+        if(engineQueue.isEmpty()) {
+            resetEngineQueue();
+        }
+        this.engineInt = engineQueue.remove();
+        return engineInt;
+    }
+
+    public int startRound(boolean serializedStart, int humanScore, int computerScore, int roundNumber) {
+        if(!serializedStart) {
+            dealTiles();
+            displayRoundState();
+        }
+        int pipsValue = startTurns(humanScore, computerScore, roundNumber);
+        return 0;
+    }
+
+    private int startTurns(int humanScore, int computerScore, int roundNumber) {
+        //integers that will store the sum of pips of the tiles in a players hand when the other player empties their hand
+        int humanPipsLeft, computerPipsLeft = 0;
+        displayRoundState();
+        humanTurn = true;
+        do {
+            if(humanTurn) {
+                //BURBUR NEED TO CHANGE SECOND ARGUMENT IN THIS FUNCTION CALL
+                //computerPipsLeft = humanPlayer.play(this.humanPlayer,this.humanPlayer, this.mexicanTrain, this.boneyard);
+                if(humanPlayer.handEmpty()){
+                    //do stuff if human players hand is empty.
+                }
+                this.humanTurn = false;
+                this.computerTurn = true;
+            }
+
+            if(computerTurn) {
+                this.computerTurn = false;
+                this.humanTurn = true;
+                break;
+            }
+        } while(true);
+        return 0;
+    }
+
+
+
+    //CODE TESTING
+
+
 }

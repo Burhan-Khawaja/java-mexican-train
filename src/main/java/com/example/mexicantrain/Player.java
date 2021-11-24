@@ -2,11 +2,14 @@ package com.example.mexicantrain;
 
 import android.app.Activity;
 
-public class Player {
+public abstract class Player {
 
     protected Hand playerHand = new Hand();
     protected Activity activity;
-    private Train playerTrain = new Train();
+    protected Train playerTrain = new Train();
+    private boolean humanTrainPlayable;
+    private boolean computerTrainPlayable;
+    private boolean mexicanTrainPlayable;
     /**
      * Add a tile to a players hand
      * @param tileToAdd Tile object that gets added to a players hand
@@ -23,6 +26,17 @@ public class Player {
         this.activity = _activity;
     }
 
+    /**
+     * Checks if a players hand is empty
+     * @return boolean value, true if hand is empty false otherwise
+     */
+    public boolean handEmpty(){
+        if(playerHand.getSize() == 0) {
+            return true;
+        }
+        return false;
+    }
+
     public String trainAsString(){
         return playerTrain.trainAsString();
     }
@@ -34,4 +48,8 @@ public class Player {
     public void addTileBack(Tile tileToAdd) {
         playerTrain.addTileBack(tileToAdd);
     }
+
+    abstract int play(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand Boneyard);
+
+
 }

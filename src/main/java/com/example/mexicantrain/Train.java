@@ -1,7 +1,5 @@
 package com.example.mexicantrain;
 
-import android.util.Log;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
@@ -51,10 +49,6 @@ public class Train {
         while(iterator.hasNext()){
             train += iterator.next().tileAsString();
         }
-        Log.d("mytag",train);
-        //for(int i = 0; i < trainDeque.size(); i++) {
-        //    trainDeque.toString() .tileAsString();
-        //}*/
 
         return train;
 
