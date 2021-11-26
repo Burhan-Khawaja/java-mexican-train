@@ -8,7 +8,7 @@ public class Hand {
 
     /**
      Add a tile to the players hand
-     @param tile tileToAdd - Tile object that gets added to the hand
+     @param Tile tileToAdd - Tile object that gets added to the hand
      */
     public void addTile(Tile tileToAdd) {
         hand.add(tileToAdd);
@@ -38,5 +38,23 @@ public class Hand {
      */
     public void changeTileAtIndex(Tile newTile,int index) {
 
+    }
+
+    public void removeTile(int value1, int value2) {
+        Tile tmpTile = new Tile(value1, value2);
+
+        //find index of Tile
+        for(int i = 0; i < hand.size(); i++) {
+            //since we occasionaly swap tiles to fit on the train we have to check
+            //if the tile at index's first number is equal to value 1 and value 2 since it might be swapped.
+            //if hand[i].firstnumber = value1, and hand[i].secondnumber = value 2, remove it
+            if(hand.get(i).getFirstNum() == value1 && hand.get(i).getSecondNum() == value2  ) {
+                hand.remove(i);
+            }
+            //else if hand[i]'s first number = value 2, and hand[i]'s second number = value 1
+            else if(hand.get(i).getFirstNum() == value2 && hand.get(i).getSecondNum() == value1 ) {
+                hand.remove(i);
+            }
+        }
     }
 }

@@ -1,29 +1,54 @@
 package com.example.mexicantrain;
 
 import android.app.Activity;
-import android.widget.LinearLayout;
+import android.util.Log;
 import android.widget.TextView;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 
 public class Round {
-    //mexican train
-    //boneyard
-
+    //CLASS VARIABLES
     private Hand boneyard = new Hand();
+    private Train mexicanTrain = new Train();
     private Human humanPlayer = new Human(this.activity);
-    //private Computer computerPlayer = new Computer(this.activity);
+    private Human computerPlayer = new Human(this.activity);
     private Activity activity;
 
+    private int engineInt;
+
+    private Queue<Integer> engineQueue = new ArrayDeque<Integer>();
+    private boolean humanTurn;
+    private boolean computerTurn;
+    private boolean computerWon;
+    private boolean humanWon;
+
+    //test value.
+    private boolean humanHasMove;
+//burbur depreciated roundNumber stores this now    private int currentRound;
+
+    //BURBUR TESTING STORING HUMAN/COMPUTER/ROUND NUMBER IN ROUND CLASS
+    private int humanScore;
+    private int computerScore;
+    private int roundNumber;
+
+    //CONSTRUCTOR
     Round(Activity activity) {
         this.activity = activity;
         //set activity through a setter b/c if we use constructor, then this.activity is not initialized,
         // and we set it to a null value in other classes.
         humanPlayer.setActivity(this.activity);
+
     }
 
+//================================//================================//================================//================================
+    //SELECTORS
 
+    //MUTATORS
+
+    //HELPER FUNCTIONS
     /**
      * create a double nine set of tiles, as well as shuffle the tiles and deal the tiles to the human and computer player.
      */
@@ -70,32 +95,185 @@ public class Round {
 
     }
 
+
+
     /**
-     * Display the human players hand to the screen.
+     * reset the queue of engine tiles to be 9-0 descending.
      */
-    public void displayHumanHand(){
-        humanPlayer.displayHand();
+    public void resetEngineQueue() {
+        this.engineQueue.clear();
+        //is there a better way of doing this? probably. Just refactor it later lol.
+        //at the very least its a simple and understandable solution. just add 9-0 to the queue one at a time.
+        this.engineQueue.add(9);
+        this.engineQueue.add(8);
+        this.engineQueue.add(7);
+        this.engineQueue.add(6);
+        this.engineQueue.add(5);
+        this.engineQueue.add(4);
+        this.engineQueue.add(3);
+        this.engineQueue.add(2);
+        this.engineQueue.add(1);
+        this.engineQueue.add(0);
+
     }
 
     /**
-     * Displays the current state of the game, including human and player hands and trains
-     * and top of boneyard
+     * get the next value in the queue of engine values
+     * @return integer value that is the next engine value
      */
-    public void displayRoundState() {
-        //BURBUR TESTING PURPOSES ADD TILES TO TRAIN.
-        humanPlayer.addTileFront(new Tile(1,1));
-        humanPlayer.addTileFront(new Tile(2,2));
+    public int getNextEngineValue() {
+        if(engineQueue.isEmpty()) {
+            resetEngineQueue();
+        }
+        this.engineInt = engineQueue.remove();
+        return engineInt;
+    }
+
+    public int startRound(boolean serializedStart, int humanScore, int computerScore, int roundNumber) {
 
 
-        //get train section of UI
+        if(!serializedStart) {
+            this.roundNumber = 0;
+            dealTiles();
+            //BURBUR REMOVE ENGINE TILE
+            this.engineInt = getNextEngineValue();
+            setTrainEndNumbers();
+/*
+            //BURBUR for testing purposes delete all tiles in users hand
+            while( humanPlayer.playerHand.getSize() > 0) {
+                int i = 0;
+                humanPlayer.playerHand.removeTile(humanPlayer.playerHand.getTile(i).getFirstNum(),humanPlayer.playerHand.getTile(i).getSecondNum());
+            }
 
-        //NEED TO GET THE LINEAR LAYOUT OF THE HORIZONTAL SCROLLVIEW, NOT THE ACTUAL SCROLLVIEW
-        LinearLayout allTrains = (LinearLayout) this.activity.findViewById(R.id.allTrainsLayout);
-        //create a new TextView that will store the train values.
-        TextView humanTrainValues = new TextView(this.activity);
-        humanTrainValues.setText(humanPlayer.trainAsString());
+            //BURBUR TESTING CODE
+            humanPlayer.addTileToHand(new Tile(1,1));
+            humanPlayer.addTileToHand(new Tile(1,8));
+            humanPlayer.addTileToHand(new Tile(8,8));
 
-        allTrains.addView(humanTrainValues);
+*/
+            humanPlayer.addTileToHand(new Tile(9,9));
+            //BURBUR who goes first
+            humanTurn = true;
+        }
+        this.roundNumber = roundNumber;
+        this.humanScore = humanScore;
+        this.computerScore = computerScore;
+        //int pipsValue = startTurns(humanPlayer,humanPlayer,mexicanTrain,boneyard, new Tile(-1,-1), ' ');
+        return 0;
+    }
 
+    private void setTrainEndNumbers() {
+        mexicanTrain.setTrainEndNumber(this.engineInt);
+        humanPlayer.playerTrain.setTrainEndNumber(this.engineInt);
+
+    }
+
+    public int playTile(Tile userTile, char trainToPlayOn) {
+        int humanPipsValue = 0;
+        int computerPipsValue = 0;
+        //LinearLayout gameFeed = (LinearLayout) this.activity.findViewById(R.id.gameInstructionLL);
+        //TextView bottomText = (TextView) new TextView(this.activity);
+        if(humanTurn) {
+            //bottomText.setText("Humans turn. Select a tile to play.");
+            //gameFeed.addView(bottomText);
+            //displayRoundState();
+            humanPipsValue = humanPlayer.play(humanPlayer, humanPlayer, mexicanTrain, boneyard, userTile, trainToPlayOn);
+
+            //THIS LOGIC SHOULD BE HANDELED IN CONTROLLER CLASS
+            //user played a double tile.
+            if (humanPipsValue == -123) {
+                //user played 1 double tile. redisplay hand and tell them to select another tile.
+                //bottomText.setText("You played a double tile! Select another tile to play!");
+                Log.d("doubleTesting", "User played a double tile, displaying hand again.");
+            }
+
+
+            //users turn is over
+            if (humanPipsValue == 0) {
+                humanTurn = false;
+                computerTurn = true;
+            }
+
+            if (humanPipsValue > 0) {
+                //human hand is empty, and the human won the round
+
+            }
+        }
+
+        if(computerTurn == true) {
+            Log.d("myTag", "COMPUTER TURN");
+            //bottomText.setText("COMPUTER TURN!");
+            //gameFeed.addView(bottomText);
+
+            //computerPlayer.play()
+            computerTurn = false;
+            humanTurn = true;
+            //after computer is done with its turn, display round state.
+            //displayRoundState();
+
+            TextView bottomText2 = (TextView) new TextView(this.activity);
+            bottomText2.setText("Computers Turn finished, Humans turn now. Select a tile.");
+            return 0;
+
+        }
+        //gameFeed.addView(bottomText2);
+        return 0;
+    }
+
+
+    public void playerHasValidMove() {
+        boolean existsValidMove = humanPlayer.existsValidMove(humanPlayer, humanPlayer, mexicanTrain);
+
+        //player does not have a valid move.
+        if (existsValidMove == false) {
+            //go through procedure for when a user has no playable tiles.
+            boolean skipTurn = humanPlayer.noPlayableTiles(humanPlayer, humanPlayer, mexicanTrain, boneyard);
+            //the tile the user picked is not playable,so place a marker on their train and skip their turn
+            if (skipTurn == false) {
+                //tile drawn is not playable, place marker and skip turn
+                //BURBUR NEED TO ADD MARKER TO TRAIN.
+                //bottomText.setText("The tile you picked from the boneyard is not playable.");
+            }
+            else { //tile picked is playable. play it.
+                //bottomText.setText("The tile you picked from the boneyard is playable. Restarting turn.");
+            }
+
+        }
+    }
+
+    public String getHumanAndComputerTrain(){
+        String trains = humanPlayer.trainAsString() + " " + engineInt + "-" + engineInt + " " + computerPlayer.trainAsString();
+        return trains;
+    }
+
+    public Hand getHumanHand() {
+        return this.humanPlayer.getHand();
     }
 }
+/*
+    boolean playerHasValidMove = humanPlayer.existsValidMove(humanPlayer, humanPlayer, mexicanTrain);
+
+        if (playerHasValidMove == false) {
+                //get bottomText so we can update it based on what happens
+                LinearLayout gameFeed = (LinearLayout) this.activity.findViewById(R.id.gameInstructionLL);
+                TextView bottomText = (TextView) new TextView(this.activity);
+                //go through procedure for when a user has no playable tiles.
+                boolean skipTurn = humanPlayer.noPlayableTiles(humanPlayer, humanPlayer, mexicanTrain, boneyard);
+                if (skipTurn == false) { //the tile the user picked is not playable,so place a marker on their train and skip their turn
+                computerTurn = true;
+                humanTurn = false;
+                //BURBUR maybe have a startComputerTurn function that we kickoff.
+                //tile drawn is not playable, place marker and skip turn
+                //BURBUR NEED TO ADD MARKER TO TRAIN.
+
+                bottomText.setText("You had no valid move and The tile you picked from the boneyard is not playable. Computers Turn.");
+                gameFeed.addView(bottomText);
+                //startTurns(new Tile (-1,-1), ' ');
+                }
+                else { //tile picked is playable. play it.
+                bottomText.setText("The tile you picked from the boneyard is playable. Restarting turn.");
+                gameFeed.addView(bottomText);
+                }
+
+                }
+                */
