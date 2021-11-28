@@ -16,8 +16,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    static final String INTENT_COMPUTER_SCORE = "gameComputerScore";
+    static final String INTENT_HUMAN_SCORE = "gameHumanScore";
+    static final String INTENT_ROUND_NUMBER = "gameRoundNum";
+    static final String INTENT_ROUND_ENGINEINT = "roundEngineInt";
 
+    public LinearLayout gameFeed;// = new LinearLayout(this);
     public Game game = new Game(this);
 
     @Override
@@ -58,12 +62,56 @@ public class MainActivity extends AppCompatActivity {
         }
 
          */
-
+        gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
         //Game game = new Game(this);
-        game.playGame();
-        displayTrains();
-        displayHand();
+        if(getIntent() != null) {
+            Log.d("myTag", "Get Intent is not null");
+            if(getIntent().hasExtra(INTENT_COMPUTER_SCORE) ) {
+                game.addComputerScore( getIntent().getIntExtra(INTENT_COMPUTER_SCORE, -1));
+            }
+            if(getIntent().hasExtra(INTENT_HUMAN_SCORE) ) {
+                game.addHumanScore( getIntent().getIntExtra(INTENT_HUMAN_SCORE, -1));
+            }
+            if(getIntent().hasExtra(INTENT_ROUND_NUMBER) ) {
+                game.setRoundNumber( getIntent().getIntExtra(INTENT_ROUND_NUMBER, -1));
+            }
+            if(getIntent().hasExtra(INTENT_ROUND_ENGINEINT)) {
+                game.setEngineInt(getIntent().getIntExtra(INTENT_ROUND_ENGINEINT, -1));
+            }
+        }
+        //increment round number.
+        game.setRoundNumber(game.getRoundNumber() + 1);
 
+        //set labels for round, computer, and human score
+        TextView roundLabel = (TextView) findViewById(R.id.roundLabel);
+        TextView computerScoreLabel = (TextView) findViewById(R.id.computerScoreLabel);
+        TextView humanScoreLabel = (TextView) findViewById(R.id.humanScoreLabel);
+
+        roundLabel.setText("Round: " + Integer.toString(game.getRoundNumber()));
+        computerScoreLabel.setText("Computer Score: " + Integer.toString(game.getComputerScore()));
+        humanScoreLabel.setText("Human Score: " + Integer.toString(game.getHumanScore()));
+
+
+        game.playGame();
+        //remove all tiles from players hand
+ //       /*
+        while( game.getHumanHand().getSize() > 0) {
+            int i = 0;
+            game.getHumanHand().removeTile(game.getHumanHand().getTile(i).getFirstNum(),game.getHumanHand().getTile(i).getSecondNum());
+        }
+
+        //BURBUR TESTING CODE
+       // game.getHumanHand().addTile(new Tile(1,1));
+        //game.getHumanHand().addTile(new Tile(1,8));
+        game.getHumanHand().addTile(new Tile(9,8));
+        game.getHumanHand().addTile(new Tile(9,9));
+        game.getHumanHand().addTile(new Tile(9,9));
+        game.getHumanHand().addTile(new Tile(9,9));
+        game.getHumanHand().addTile(new Tile(9,9));
+//*/
+        displayTrains();
+        displayComputerHand();
+        displayHand();
 
     }
 
@@ -88,16 +136,40 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout allTrains = (LinearLayout) findViewById(R.id.allTrainsLayout);
         allTrains.removeAllViews();
+
         //create a new TextView that will store the train values.
         TextView humanTrainValues = new TextView(this);
         humanTrainValues.setText(game.getHumanAndComputerTrain());
-        //humanTrainValues.setText(humanPlayer.trainAsString());
-        //Log.d("myTag", humanPlayer.trainAsString());
         allTrains.addView(humanTrainValues);
 
+        //display mexican train
+
+        LinearLayout mexicanTrain = (LinearLayout) findViewById(R.id.mexicanTrainLL);
+        mexicanTrain.removeAllViews();
+        TextView mexicanTrainValue = new TextView(this);
+        mexicanTrainValue.setText(game.getMexicanTrain());
+        mexicanTrain.addView(mexicanTrainValue);
     }
 
     public void displayHand() {
+        //BURBUR check for valid move BEFORE user makes a move
+        //BURBUR need to get humanTrainPlayable and other trains too
+        game.setPlayableTrainsHuman();
+
+        //IF human is playing we have to check if they have a valid move before they play
+        if(game.getHumanTurn()) {
+            boolean doesHumanHaveMove = game.humanHasValidMove();
+            if (doesHumanHaveMove == false) {
+                TextView text = new TextView(this);
+                Log.d("myTag", "The tile you picked from the boneyard is not playable, skipping turn.");
+                //kickoff computer turn here.
+                this.game.playTile(new Tile(-1,-1), ' ');
+                //text.setText("Error: You have no move, and picked a tile from the boneyard");
+                //gameFeed.addView(text, gameFeed.getChildCount() - 1);
+                //set computer turn to true?
+            }
+        }
+
         Hand playerHand = game.getHumanHand();
         TableRow row1 = (TableRow) this.findViewById(R.id.playerHandRow1);
         TableRow row2 = (TableRow) this.findViewById(R.id.playerHandRow2);
@@ -133,6 +205,42 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 row4.addView(element);
+            }
+        }
+        displayComputerHand();
+
+    }
+
+    public void displayComputerHand() {
+        Hand computerHand = game.getComputerHand();
+        TableRow cRow1 = (TableRow) this.findViewById(R.id.computerHandRow1);
+        TableRow cRow2 = (TableRow) this.findViewById(R.id.computerHandRow2);
+        TableRow cRow3 = (TableRow) this.findViewById(R.id.computerHandRow3);
+        TableRow cRow4 = (TableRow) this.findViewById(R.id.computerHandRow4);
+
+        cRow1.removeAllViews();
+        cRow2.removeAllViews();
+        cRow3.removeAllViews();
+        cRow4.removeAllViews();
+
+        for(int i = 0; i < computerHand.getSize(); i++) {
+            //textView element that will store the current tile we are displaying in the table.
+            TextView element = new TextView(this);
+            element.setText(computerHand.getTile(i).tileAsString());
+            element.setPadding(5,5,5,5);
+            Log.d("mytag","displaying tile from computer hand");
+
+            if (i < 6) {
+                cRow1.addView(element);
+            }
+            else if(i < 12) {
+                cRow2.addView(element);
+            }
+            else if(i < 18) {
+                cRow3.addView(element);
+            }
+            else {
+                cRow4.addView(element);
             }
         }
 
@@ -194,13 +302,15 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Log.d("mytag", "Human Train Selected.");
                     popupWindow.dismiss();
-                    //humanPlayer.play(humanPlayer, humanPlayer, mexicanTrain, boneyard, userTile, 'h');
-                    int value = game.playTile( userTile, 'h');
-                    //user played a double tile and has to play another tile. redisplay hand
-                    if (value == 0) {
-                        displayTrains();
-                        displayHand();
-                    }
+
+                    humanPlaysTile(userTile, 'h');
+                    //human finished its turn, so it has to be computers turn after this.
+
+                    //displayTrains();
+                    //displayHand();
+                    //int value = game.playTile( userTile, 'h');
+                    //if (value == 0) {
+                    //}
                 }
             });
         }
@@ -212,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Log.d("mytag", "Computer Train Selected.");
                     popupWindow.dismiss();
-                    //humanPlayer.play(humanPlayer, humanPlayer, mexicanTrain, boneyard, userTile, 'c');
+                    humanPlaysTile(userTile, 'c');
                 }
             });
         }
@@ -224,11 +334,39 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Log.d("mytag", "Mexican Train Selected.");
                     popupWindow.dismiss();
-                    //humanPlayer.play(humanPlayer, humanPlayer, mexicanTrain, boneyard, userTile, 'm');
+                    humanPlaysTile(userTile, 'm');
                 }
             });
         }
         Log.d("mytag", "Redisplaying Hand");
     }
 
+    void humanPlaysTile(Tile userTile, char userTrain) {
+        int value = game.playTile( userTile, userTrain);
+
+        //BURBUR THIS SHOULD BE IN GAME CLASS
+        if(value > 0) {
+            game.addComputerScore(value);
+            Log.d("myTag",  "Computer Score: " + Integer.toString(game.getComputerScore()));
+            //human won game, and hand is empty.
+            //end round here,
+            //game.playAgainPrompt
+            //reset all data, display everything again.
+            game.playAgain();
+        }
+        if (value == 0) {
+            //human turn over, computer turn now.
+            game.playTile(new Tile(-1, -1), ' ');
+        }
+        if(value == -22) {
+            Log.d("myTag", "Error: User played on an invalid train. Choose again.");
+            //user selected an invalid train.
+            //gameFeed.addView( (TextView) TextView(this).setText("Error: You played on an invalid train"));
+        }
+        if(value == -123) {
+            //human played a double, and is playing another tile.
+        }
+        displayTrains();
+        displayHand();
+    }
 }

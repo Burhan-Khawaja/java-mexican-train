@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MexicanTrain">
         <activity
-            android:name=".DisplayMessageActivity"
+            android:name=".playAgainScreen"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

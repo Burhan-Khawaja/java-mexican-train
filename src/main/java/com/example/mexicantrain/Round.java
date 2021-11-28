@@ -14,7 +14,7 @@ public class Round {
     private Hand boneyard = new Hand();
     private Train mexicanTrain = new Train();
     private Human humanPlayer = new Human(this.activity);
-    private Human computerPlayer = new Human(this.activity);
+    private Computer computerPlayer = new Computer(this.activity);
     private Activity activity;
 
     private int engineInt;
@@ -86,7 +86,7 @@ public class Round {
             }
             else if (i < 32) {
                 //Add tiles to computer players hand.
-                // computer.addTileToHand(new Tile(i, j));
+                 computerPlayer.addTileToHand(tiles.get(i));
             }
             else {
                 boneyard.addTile(tiles.get(i));
@@ -171,14 +171,26 @@ public class Round {
     public int playTile(Tile userTile, char trainToPlayOn) {
         int humanPipsValue = 0;
         int computerPipsValue = 0;
-        //LinearLayout gameFeed = (LinearLayout) this.activity.findViewById(R.id.gameInstructionLL);
-        //TextView bottomText = (TextView) new TextView(this.activity);
+
+
+        //if we want to have the computer make a move, pass in a tile with values of -1, -1
+        if(userTile.getFirstNum() == -1 && userTile.getSecondNum() == -1) {
+            computerTurn = true;
+            humanTurn = false;
+        }
+
         if(humanTurn) {
+            Log.d("myTag", "human Turn TURN");
+
             //bottomText.setText("Humans turn. Select a tile to play.");
             //gameFeed.addView(bottomText);
             //displayRoundState();
-            humanPipsValue = humanPlayer.play(humanPlayer, humanPlayer, mexicanTrain, boneyard, userTile, trainToPlayOn);
-
+            humanPipsValue = humanPlayer.play(humanPlayer, computerPlayer, mexicanTrain, boneyard, userTile, trainToPlayOn);
+            if(humanPipsValue > 0) {
+                humanWon = true;
+            }
+            return humanPipsValue;
+            /*
             //THIS LOGIC SHOULD BE HANDELED IN CONTROLLER CLASS
             //user played a double tile.
             if (humanPipsValue == -123) {
@@ -198,6 +210,8 @@ public class Round {
                 //human hand is empty, and the human won the round
 
             }
+
+             */
         }
 
         if(computerTurn == true) {
@@ -205,7 +219,7 @@ public class Round {
             //bottomText.setText("COMPUTER TURN!");
             //gameFeed.addView(bottomText);
 
-            //computerPlayer.play()
+            computerPipsValue = computerPlayer.play(humanPlayer, computerPlayer, mexicanTrain, boneyard, userTile, trainToPlayOn);
             computerTurn = false;
             humanTurn = true;
             //after computer is done with its turn, display round state.
@@ -213,43 +227,92 @@ public class Round {
 
             TextView bottomText2 = (TextView) new TextView(this.activity);
             bottomText2.setText("Computers Turn finished, Humans turn now. Select a tile.");
-            return 0;
+            return computerPipsValue;
 
         }
-        //gameFeed.addView(bottomText2);
         return 0;
     }
 
 
-    public void playerHasValidMove() {
+    public boolean playerHasValidMove() {
         boolean existsValidMove = humanPlayer.existsValidMove(humanPlayer, humanPlayer, mexicanTrain);
 
+        //-1: Player does not have a valid move.
+        //-666: boneyard is empty and player has to skip tern.
+        //-2: player picks a tile and it is playable.
         //player does not have a valid move.
         if (existsValidMove == false) {
             //go through procedure for when a user has no playable tiles.
             boolean skipTurn = humanPlayer.noPlayableTiles(humanPlayer, humanPlayer, mexicanTrain, boneyard);
             //the tile the user picked is not playable,so place a marker on their train and skip their turn
             if (skipTurn == false) {
+                computerTurn = true;
+                humanTurn = false;
                 //tile drawn is not playable, place marker and skip turn
                 //BURBUR NEED TO ADD MARKER TO TRAIN.
                 //bottomText.setText("The tile you picked from the boneyard is not playable.");
+                return false;
             }
             else { //tile picked is playable. play it.
                 //bottomText.setText("The tile you picked from the boneyard is playable. Restarting turn.");
+                return true;
             }
-
         }
+        return true;
     }
 
     public String getHumanAndComputerTrain(){
-        String trains = humanPlayer.trainAsString() + " " + engineInt + "-" + engineInt + " " + computerPlayer.trainAsString();
+        String trains = computerPlayer.trainAsString()  + " " + engineInt + " - " + engineInt + " " + humanPlayer.trainAsString();
         return trains;
     }
 
     public Hand getHumanHand() {
         return this.humanPlayer.getHand();
     }
+    public Hand getComputerHand() {
+        return this.computerPlayer.getHand();
+    }
+
+    public void setPlayableTrains(){
+        //orphan double check
+        //if false, then get marker on cpu train and set human to playable
+        this.humanPlayer.humanTrainPlayable = true;
+    }
+
+    public boolean getHumanTurn() {
+        return this.humanTurn;
+    }
+
+    public String getMexicanTrain() {
+        return mexicanTrain.trainAsString();
+    }
+
+    public boolean getWinner() {
+        if(humanWon) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void setEngineInt(int engineVal) {
+        if (engineQueue.isEmpty()) {
+            resetEngineQueue();
+        }
+        while (this.engineInt != engineVal) {
+            engineInt = getNextEngineValue();
+        }
+
+    }
+
+    public int getEngineValue() {
+        return this.engineInt;
+    }
 }
+
+
+
 /*
     boolean playerHasValidMove = humanPlayer.existsValidMove(humanPlayer, humanPlayer, mexicanTrain);
 

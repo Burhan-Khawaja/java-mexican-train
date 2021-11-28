@@ -67,4 +67,21 @@ public class Train {
     public int getTrainEndNumber(){
         return this.trainEndNumber;
     }
+
+
+    public boolean getMarker() {
+        return marker;
+    }
+
+    public void setMarker(boolean marker) {
+        this.marker = marker;
+    }
+
+    public boolean getOrphanDouble() {
+        return orphanDouble;
+    }
+
+    public void setOrphanDouble(boolean orphanDouble) {
+        this.orphanDouble = orphanDouble;
+    }
 }

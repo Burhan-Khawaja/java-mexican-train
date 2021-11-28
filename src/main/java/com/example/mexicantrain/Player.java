@@ -11,6 +11,12 @@ public abstract class Player {
     protected boolean humanTrainPlayable;
     protected boolean computerTrainPlayable;
     protected boolean mexicanTrainPlayable;
+
+    public Hand getHand() {
+        return this.playerHand;
+    }
+
+
     /**
      * Add a tile to a players hand
      * @param tileToAdd Tile object that gets added to a players hand
@@ -124,5 +130,66 @@ public abstract class Player {
 
         }
         return false;
+    }
+
+    boolean checkOrphanDoubles(Player humanPlayer, Player computerPlayer, Train mexicanTrain)
+    {
+        boolean orphanDouble = false;
+        //1- check if there exists any orphan double on a train
+        if (humanPlayer.playerTrain.getOrphanDouble() == true || computerPlayer.playerTrain.getOrphanDouble() == true || mexicanTrain.getOrphanDouble() == true) {
+            //make all trains unplayable. later we will check which trains have orphan doubles and set them as the only trains playable
+            this.humanTrainPlayable = false;
+            this.computerTrainPlayable = false;
+            this.mexicanTrainPlayable = false;
+        }
+        //check if each train has an orphan double. if it does, make that train playable, and set orphanDouble to true.
+        if (humanPlayer.playerTrain.getOrphanDouble() == true) {
+            //BURBUR output that theres an orphandouble on humantrain
+            this.humanTrainPlayable = true;
+            orphanDouble = true;
+        }
+        if (computerPlayer.playerTrain.getOrphanDouble() == true) {
+            //BURBUR output that theres an orphandouble on
+            this.computerTrainPlayable = true;
+            orphanDouble = true;
+        }
+        if (mexicanTrain.getOrphanDouble() == true) {
+            //BURBUR output that theres an orphandouble on
+            this.mexicanTrainPlayable = true;
+            orphanDouble = true;
+        }
+        return orphanDouble;
+    }
+
+    public boolean checkUserTrainPlayable(char userTrainChoice) {
+        if (userTrainChoice == 'h' && !this.humanTrainPlayable) {
+        //    std::cout << "Error: You are not allowed to play on the human train.";
+            return false;
+        }
+        else if (userTrainChoice == 'c' && !this.computerTrainPlayable) {
+        //    std::cout << "Error: You are not allowed to play on the computer train";
+            return false;
+        }
+        else if (userTrainChoice == 'm' && !this.mexicanTrainPlayable) {
+        //    std::cout << "Error: You are not allowed to play on the Mexican Train";
+            return false;
+        }
+        return true;
+    }
+
+    public boolean getTrainMarker() {
+        return this.playerTrain.getMarker();
+    }
+
+    public int sumOfPips() {
+        //total will hold the sum of the pips in the hand
+        int total = 0;
+        //for every tile in the players hand, add the first and second number to total.
+        for (int i = 0; i < playerHand.getSize(); i++) {
+            total += playerHand.getTile(i).getFirstNum();
+            total += playerHand.getTile(i).getSecondNum();
+        }
+        Log.d("myTag", "Sum Of Pips = " + Integer.toString(total));
+        return total;
     }
 }
