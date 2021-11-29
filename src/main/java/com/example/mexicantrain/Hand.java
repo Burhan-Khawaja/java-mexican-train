@@ -57,4 +57,8 @@ public class Hand {
             }
         }
     }
+
+    public ArrayList<Tile> getHandArrayList() {
+        return this.hand;
+    }
 }

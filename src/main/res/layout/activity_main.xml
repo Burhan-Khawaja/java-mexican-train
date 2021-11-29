@@ -34,32 +34,44 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.072" />
 
-    <ScrollView
-        android:id="@+id/gameInstruction"
-        android:layout_width="375dp"
-        android:layout_height="13dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/roundLabel"
+        android:layout_width="107dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/trains"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.081" />
+
+    <HorizontalScrollView
+        android:id="@+id/allTrains"
+        android:layout_width="370dp"
+        android:layout_height="29dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/mexicanTrain"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.375"
+        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SpeakableTextPresentCheck">
 
         <LinearLayout
-            android:id="@+id/gameInstructionLL"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:id="@+id/allTrainsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </HorizontalScrollView>
 
     <TableLayout
         android:id="@+id/computerHand"
-        android:layout_width="329dp"
-        android:layout_height="57dp"
-        android:layout_marginBottom="24dp"
+        android:layout_width="389dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="104dp"
         app:layout_constraintBottom_toTopOf="@+id/gameInstruction"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.17"
+        app:layout_constraintHorizontal_bias="0.363"
         app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
@@ -83,12 +95,75 @@
             android:layout_height="match_parent" />
     </TableLayout>
 
+    <TextView
+        android:id="@+id/trains"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Trains:"
+        app:layout_constraintBottom_toTopOf="@+id/allTrains"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.037"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TableLayout
+        android:id="@+id/playerHand"
+        android:layout_width="355dp"
+        android:layout_height="96dp"
+        android:layout_marginBottom="52dp"
+        app:layout_constraintBottom_toTopOf="@+id/computerHandLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.294"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow
+            android:id="@+id/playerHandRow1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/playerHandRow2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:id="@+id/playerHandRow3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:id="@+id/playerHandRow4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/testRow5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/computerHandLabel"
+        android:layout_width="107dp"
+        android:layout_height="25dp"
+        android:layout_marginBottom="20dp"
+        android:text="Computer Hand"
+        app:layout_constraintBottom_toTopOf="@+id/computerHand"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <HorizontalScrollView
         android:id="@+id/mexicanTrain"
         android:layout_width="362dp"
         android:layout_height="38dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/humanHandLabel"
         app:layout_constraintEnd_toEndOf="@+id/allTrains"
         app:layout_constraintHorizontal_bias="0.85"
@@ -101,103 +176,33 @@
             android:layout_height="match_parent" />
     </HorizontalScrollView>
 
-    <TextView
-        android:id="@+id/computerHandLabel"
-        android:layout_width="107dp"
-        android:layout_height="25dp"
-        android:layout_marginBottom="4dp"
-        android:text="computerHand"
-        app:layout_constraintBottom_toTopOf="@+id/computerHand"
+    <ScrollView
+        android:id="@+id/gameInstruction"
+        android:layout_width="420dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.065"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/trains"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:text="Trains:"
-        app:layout_constraintBottom_toTopOf="@+id/allTrains"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.037"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/roundLabel"
-        android:layout_width="107dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/trains"
+        app:layout_constraintHorizontal_bias="0.305"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.081" />
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <LinearLayout
+            android:id="@+id/gameInstructionLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <TextView
         android:id="@+id/humanHandLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="8dp"
         android:text="Human Hand:"
         app:layout_constraintBottom_toTopOf="@+id/playerHand"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.061"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TableLayout
-        android:id="@+id/playerHand"
-        android:layout_width="343dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="56dp"
-        app:layout_constraintBottom_toTopOf="@+id/computerHandLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.294"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TableRow
-            android:id="@+id/playerHandRow4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/testRow5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/playerHandRow1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/playerHandRow2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/playerHandRow3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </TableLayout>
-
-    <HorizontalScrollView
-        android:id="@+id/allTrains"
-        android:layout_width="370dp"
-        android:layout_height="29dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/mexicanTrain"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SpeakableTextPresentCheck">
-
-        <LinearLayout
-            android:id="@+id/allTrainsLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </HorizontalScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
