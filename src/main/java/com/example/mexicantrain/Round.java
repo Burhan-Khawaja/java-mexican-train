@@ -138,19 +138,6 @@ public class Round {
             //BURBUR REMOVE ENGINE TILE
             this.engineInt = getNextEngineValue();
             setTrainEndNumbers();
-/*
-            //BURBUR for testing purposes delete all tiles in users hand
-            while( humanPlayer.playerHand.getSize() > 0) {
-                int i = 0;
-                humanPlayer.playerHand.removeTile(humanPlayer.playerHand.getTile(i).getFirstNum(),humanPlayer.playerHand.getTile(i).getSecondNum());
-            }
-
-            //BURBUR TESTING CODE
-            humanPlayer.addTileToHand(new Tile(1,1));
-            humanPlayer.addTileToHand(new Tile(1,8));
-            humanPlayer.addTileToHand(new Tile(8,8));
-
-*/
             humanPlayer.addTileToHand(new Tile(9,9));
             //BURBUR who goes first
             humanTurn = true;
@@ -165,7 +152,7 @@ public class Round {
     private void setTrainEndNumbers() {
         mexicanTrain.setTrainEndNumber(this.engineInt);
         humanPlayer.playerTrain.setTrainEndNumber(this.engineInt);
-
+        computerPlayer.playerTrain.setTrainEndNumber(this.engineInt);
     }
 
     public int playTile(Tile userTile, char trainToPlayOn) {
@@ -190,28 +177,6 @@ public class Round {
                 humanWon = true;
             }
             return humanPipsValue;
-            /*
-            //THIS LOGIC SHOULD BE HANDELED IN CONTROLLER CLASS
-            //user played a double tile.
-            if (humanPipsValue == -123) {
-                //user played 1 double tile. redisplay hand and tell them to select another tile.
-                //bottomText.setText("You played a double tile! Select another tile to play!");
-                Log.d("doubleTesting", "User played a double tile, displaying hand again.");
-            }
-
-
-            //users turn is over
-            if (humanPipsValue == 0) {
-                humanTurn = false;
-                computerTurn = true;
-            }
-
-            if (humanPipsValue > 0) {
-                //human hand is empty, and the human won the round
-
-            }
-
-             */
         }
 
         if(computerTurn == true) {
@@ -228,7 +193,6 @@ public class Round {
             TextView bottomText2 = (TextView) new TextView(this.activity);
             bottomText2.setText("Computers Turn finished, Humans turn now. Select a tile.");
             return computerPipsValue;
-
         }
         return 0;
     }

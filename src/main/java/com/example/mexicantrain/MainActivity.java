@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
          */
-        gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
-        //Game game = new Game(this);
+       // gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
+        //Load intent data
         if(getIntent() != null) {
             Log.d("myTag", "Get Intent is not null");
             if(getIntent().hasExtra(INTENT_COMPUTER_SCORE) ) {
@@ -94,41 +94,24 @@ public class MainActivity extends AppCompatActivity {
 
         game.playGame();
         //remove all tiles from players hand
- //       /*
+        /*
         while( game.getHumanHand().getSize() > 0) {
             int i = 0;
             game.getHumanHand().removeTile(game.getHumanHand().getTile(i).getFirstNum(),game.getHumanHand().getTile(i).getSecondNum());
         }
 
         //BURBUR TESTING CODE
-       // game.getHumanHand().addTile(new Tile(1,1));
+        //game.getHumanHand().addTile(new Tile(1,1));
         //game.getHumanHand().addTile(new Tile(1,8));
         game.getHumanHand().addTile(new Tile(9,8));
         game.getHumanHand().addTile(new Tile(9,9));
         game.getHumanHand().addTile(new Tile(9,9));
         game.getHumanHand().addTile(new Tile(9,9));
         game.getHumanHand().addTile(new Tile(9,9));
-//*/
+*/
         displayTrains();
         displayComputerHand();
         displayHand();
-
-    }
-
-    /**
-     * Called when the user taps the Send button
-     */
-    public void sendMessage(View view) {
-
-/*
-        // Do something in response to button
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-        EditText editText = (EditText) findViewById(R.id.editTextTextPersonName);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-
- */
 
     }
 
@@ -194,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            if (i < 6) {
+            if (i < 9) {
                 row1.addView(element);
             }
-            else if(i < 12) {
+            else if(i < 18) {
                 row2.addView(element);
             }
-            else if(i < 18) {
+            else if(i < 27) {
                 row3.addView(element);
             }
             else {
@@ -230,13 +213,13 @@ public class MainActivity extends AppCompatActivity {
             element.setPadding(5,5,5,5);
             Log.d("mytag","displaying tile from computer hand");
 
-            if (i < 6) {
+            if (i < 9) {
                 cRow1.addView(element);
             }
-            else if(i < 12) {
+            else if(i < 18) {
                 cRow2.addView(element);
             }
-            else if(i < 18) {
+            else if(i < 27) {
                 cRow3.addView(element);
             }
             else {

@@ -84,4 +84,8 @@ public class Train {
     public void setOrphanDouble(boolean orphanDouble) {
         this.orphanDouble = orphanDouble;
     }
+
+    public void clearTrainMarker() {
+        this.marker = false;
+    }
 }
