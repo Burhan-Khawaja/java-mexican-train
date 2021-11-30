@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.InputStream;
+import java.util.Scanner;
+
 public class Game {
     private int roundNumber;
     private int humanScore;
@@ -92,5 +95,9 @@ public class Game {
 
     public void setEngineInt(int engineVal) {
         round.setEngineInt(engineVal);
+    }
+
+    public void loadGame(String loadGameFileName) {
+
     }
 }

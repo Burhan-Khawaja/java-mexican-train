@@ -10,10 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MexicanTrain">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".playAgainScreen"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".welcomeScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

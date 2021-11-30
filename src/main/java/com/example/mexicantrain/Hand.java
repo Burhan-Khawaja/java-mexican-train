@@ -4,6 +4,7 @@ package com.example.mexicantrain;
 import java.util.ArrayList;
 
 public class Hand {
+    //ArrayList that stores an array of tiles that is the users hand
     private ArrayList<Tile> hand = new ArrayList<>();
 
     /**
@@ -13,6 +14,7 @@ public class Hand {
     public void addTile(Tile tileToAdd) {
         hand.add(tileToAdd);
     }
+    
     /**
      * Get the size of the hand
      * @return int, which represents number of tiles in the ArrayList
@@ -31,7 +33,7 @@ public class Hand {
         return hand.get(index);
     }
 
-    /**
+    /**BURBUR not used
      * Access an index of our hand and change the tile present to a tile that is passed in
      * @param newTile Tile object that will replace the index
      * @param index Integer value that is the index we access.
@@ -40,6 +42,11 @@ public class Hand {
 
     }
 
+    /**
+     * remove a tile from a  users hand given 2 numbers that are its value
+     * @param value1 - integer value that is the first value of the tile
+     * @param value2 - integer value that is the second value of the tile
+     */
     public void removeTile(int value1, int value2) {
         Tile tmpTile = new Tile(value1, value2);
 
@@ -58,6 +65,10 @@ public class Hand {
         }
     }
 
+    /**
+     * return the arrayList of the players hand
+     * @return ArrayList that is the users hand.
+     */
     public ArrayList<Tile> getHandArrayList() {
         return this.hand;
     }

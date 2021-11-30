@@ -13,6 +13,9 @@ import android.widget.PopupWindow;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.io.InputStream;
+import java.util.Scanner;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     static final String INTENT_HUMAN_SCORE = "gameHumanScore";
     static final String INTENT_ROUND_NUMBER = "gameRoundNum";
     static final String INTENT_ROUND_ENGINEINT = "roundEngineInt";
+    static final String INTENT_LOAD_GAME_NAME = "loadGame";
 
     public LinearLayout gameFeed;// = new LinearLayout(this);
     public Game game = new Game(this);
@@ -28,41 +32,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
-        if(getIntent().hasExtra("hand")) {
-            //TextView txt = (TextView) findViewById(R.id.editTextTextPersonName2);
-            //txt.setText("ASDSADASDSADSAD");
-        }
 
-
-
-        //random code idk what this testing it
-        // Get the Intent that started this activity and extract the string
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-        // Capture the layout's TextView and set the string as its text
-        TextView textView = findViewById(R.id.userName);
-       // textView.setText("TESTTESTETEST");
-
-/*
-        Log.d("mytag","testTag");
-        //Round testing
-
-        Round gameRound = new Round(this);
-        gameRound.dealTiles();
-
-
-
-
-        test enginequeue and engine values.
-
-        for(int i = 0; i < 100; i++) {
-            Log.d("engineTest", String.valueOf(gameRound.getNextEngineValue()));
-        }
-
-         */
-       // gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
+        //gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
         //Load intent data
         if(getIntent() != null) {
             Log.d("myTag", "Get Intent is not null");
@@ -77,6 +48,22 @@ public class MainActivity extends AppCompatActivity {
             }
             if(getIntent().hasExtra(INTENT_ROUND_ENGINEINT)) {
                 game.setEngineInt(getIntent().getIntExtra(INTENT_ROUND_ENGINEINT, -1));
+            }
+            //load game. open the file in mainActivity and pass it to game class
+            // so it can manipulate the data/file as needed.
+
+            if(getIntent().hasExtra(INTENT_LOAD_GAME_NAME)) {
+                String loadGameFileName = getIntent().getStringExtra(INTENT_LOAD_GAME_NAME);
+                Log.d("myTag", loadGameFileName);
+                //get the integer id that represents the file we want to open.
+                //move this to welcome screen class and pass in the id?
+                int fileId =  getResources().getIdentifier(loadGameFileName,"raw", "com.example.mexicantrain");
+                //create input stream object.
+                InputStream input = getResources().openRawResource(fileId);
+                //open scanner based on input stream line defined above. th
+                Scanner scan = new Scanner(input);
+
+                game.loadGame(loadGameFileName);
             }
         }
         //increment round number.

@@ -12,6 +12,10 @@ public class Train {
     private int trainEndNumber;
 
     //Constructor
+
+    /**
+     * constuctor for Train class.
+     */
     public Train() {
         this.trainDeque = new ArrayDeque<Tile>();
         this.marker = false;
@@ -21,9 +25,42 @@ public class Train {
 
     //selectors
 
+    /**
+     * get the end number of a train that is left "hanging"
+     * @return integer value that is the last number on the train
+     */
+    public int getTrainEndNumber(){
+        return this.trainEndNumber;
+    }
+
+    /**
+     * check if a train has an orphan double on it
+     * @return boolean value, true if there exists an orphan double, false if it doesnt
+     */
+    public boolean getOrphanDouble() {
+        return orphanDouble;
+    }
+
+    /**
+     * check if a train has a marker on it.
+     * @return true if it does false if it doesnt
+     */
+    public boolean getMarker() {
+        return marker;
+    }
+
+    /**
+     * set a marker on a train.
+     * @param marker- boolean value that is either true or false to set the value
+     */
+    public void setMarker(boolean marker) {
+        this.marker = marker;
+    }
+
+
     //mutators
     /**
-     * Add a tile to the front of the train
+     * Add a tile to the back of the train
      * @param tileToAdd Object of Tile type that will be added to train
      */
     public void addTileBack(Tile tileToAdd) {
@@ -38,6 +75,18 @@ public class Train {
         this.trainDeque.addLast(tileToAdd);
     }
 
+    /**
+     * set a trains orphan double to the boolean value passed in
+     * @param orphanDouble - boolean value that will be set to orphanDouble
+     */
+    public void setOrphanDouble(boolean orphanDouble) {
+        this.orphanDouble = orphanDouble;
+    }
+
+    /**
+     * set the trains end number
+     * @param newEndNumber integer value that will be the new end value for the train
+     */
     public void setTrainEndNumber(int newEndNumber) {
         this.trainEndNumber = newEndNumber;
     }
@@ -52,7 +101,8 @@ public class Train {
     //utility methods
 
     /**
-     *
+     * represent a train as a readable string
+     * @return String that represents all the tiles in the train
      */
     public String trainAsString(){
         String train = new String();
@@ -64,27 +114,9 @@ public class Train {
         return train;
     }
 
-    public int getTrainEndNumber(){
-        return this.trainEndNumber;
-    }
-
-
-    public boolean getMarker() {
-        return marker;
-    }
-
-    public void setMarker(boolean marker) {
-        this.marker = marker;
-    }
-
-    public boolean getOrphanDouble() {
-        return orphanDouble;
-    }
-
-    public void setOrphanDouble(boolean orphanDouble) {
-        this.orphanDouble = orphanDouble;
-    }
-
+    /**
+     * set a trains marker to false
+     */
     public void clearTrainMarker() {
         this.marker = false;
     }

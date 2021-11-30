@@ -27,7 +27,6 @@ public class Round {
 
     //test value.
     private boolean humanHasMove;
-//burbur depreciated roundNumber stores this now    private int currentRound;
 
     //BURBUR TESTING STORING HUMAN/COMPUTER/ROUND NUMBER IN ROUND CLASS
     private int humanScore;
@@ -35,6 +34,12 @@ public class Round {
     private int roundNumber;
 
     //CONSTRUCTOR
+
+    //BURBUR MIGHT NOT NEED ACTIVITY CLASS
+    /**
+     * Constructor for Round class
+     * @param activity
+     */
     Round(Activity activity) {
         this.activity = activity;
         //set activity through a setter b/c if we use constructor, then this.activity is not initialized,
@@ -43,10 +48,116 @@ public class Round {
 
     }
 
-//================================//================================//================================//================================
     //SELECTORS
 
+    /**
+     * return the human and computer train as strings formatted properly
+     * @return String that is both trains concatenated with the engine tile
+     */
+    public String getHumanAndComputerTrain(){
+        String trains = computerPlayer.trainAsString()  + " " + engineInt + " - " + engineInt + " " + humanPlayer.trainAsString();
+        return trains;
+    }
+
+    /**
+     * get the next value in the queue of engine values
+     * @return integer value that is the next engine value
+     */
+    public int getNextEngineValue() {
+        if(engineQueue.isEmpty()) {
+            resetEngineQueue();
+        }
+        this.engineInt = engineQueue.remove();
+        return engineInt;
+    }
+
+    /**
+     * return the human players hand
+     * @return Hand object that is the human players hand
+     */
+    public Hand getHumanHand() {
+        return this.humanPlayer.getHand();
+    }
+
+    /**
+     * Return the computer players hand
+     * @return Hand object that is the computer players hand
+     */
+    public Hand getComputerHand() {
+        return this.computerPlayer.getHand();
+    }
+
+    /**
+     * return the class boolean value human turn that is true if its the humans turn
+     * @return boolean value that is humanTurn
+     */
+    public boolean getHumanTurn() {
+        return this.humanTurn;
+    }
+
+    /**
+     * return mexican train as a string representation
+     * @return String that represents the tiles on the mexican trian
+     */
+    public String getMexicanTrain() {
+        return mexicanTrain.trainAsString();
+    }
+
+    /**
+     * get the winner of the round
+     * @return boolean value, true if human won false otherwise
+     */
+    public boolean getWinner() {
+        if(humanWon) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * return the current round engine value
+     * @return integer value that is the engine
+     */
+    public int getEngineValue() {
+        return this.engineInt;
+    }
+
     //MUTATORS
+
+    /**
+     * set the current playable trains
+     */
+    public void setPlayableTrains(){
+        //orphan double check
+        //if false, then get marker on cpu train and set human to playable
+        this.humanPlayer.humanTrainPlayable = true;
+    }
+
+    /**
+     * set the train end numbers to the correct value, which is the engineInt
+     */
+    private void setTrainEndNumbers() {
+        mexicanTrain.setTrainEndNumber(this.engineInt);
+        humanPlayer.playerTrain.setTrainEndNumber(this.engineInt);
+        computerPlayer.playerTrain.setTrainEndNumber(this.engineInt);
+    }
+
+    /**
+     * Set the engineVal to be the correct number. get the value from the enginequeue and reset it if needed
+     * @param engineVal- The new value that will be our engine int.
+     */
+    public void setEngineInt(int engineVal) {
+        //if the engineQueue is empty, then reset it
+        if (engineQueue.isEmpty()) {
+            resetEngineQueue();
+        }
+        //pop values off the queue until we reach the value we need.
+        while (this.engineInt != engineVal) {
+            engineInt = getNextEngineValue();
+        }
+    }
 
     //HELPER FUNCTIONS
     /**
@@ -55,6 +166,7 @@ public class Round {
     public void dealTiles(){
 
         //track if we should add tiles to human players hand, computer players hand, or boneyard.
+        //BURBUR refactor line below?
         int totalTileCreated = 0;
         //arraylist to store all tiles
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -67,19 +179,17 @@ public class Round {
         }
 
         //shuffle all tiles
+        //loop through all the tiles
+        //generate a random number from 0-size of array, and then swap the tile at the current index with the tile at the random position
         Random rng = new Random();
-
         for (int i = 0; i < tiles.size(); i++) {
             int randomNum = rng.nextInt(tiles.size() - 1);
             Tile tmpTile = tiles.get(i);
-
-            //boneyard.getTile(i) = boneyard.getTile(randomNum);
             tiles.set(i, tiles.get(randomNum));
-            //boneyard[randomNum] = tmpTile;
             tiles.set(randomNum, tmpTile);
         }
 
-        //deal tiles to human/computer/boneyard
+        //deal 16 tiles to human, 16 to computer, and rest add to boneyard.
         for(int i = 0; i < tiles.size(); i++) {
             if(i < 16) {
                 humanPlayer.addTileToHand(tiles.get(i));
@@ -117,17 +227,7 @@ public class Round {
 
     }
 
-    /**
-     * get the next value in the queue of engine values
-     * @return integer value that is the next engine value
-     */
-    public int getNextEngineValue() {
-        if(engineQueue.isEmpty()) {
-            resetEngineQueue();
-        }
-        this.engineInt = engineQueue.remove();
-        return engineInt;
-    }
+
 
     public int startRound(boolean serializedStart, int humanScore, int computerScore, int roundNumber) {
 
@@ -149,11 +249,7 @@ public class Round {
         return 0;
     }
 
-    private void setTrainEndNumbers() {
-        mexicanTrain.setTrainEndNumber(this.engineInt);
-        humanPlayer.playerTrain.setTrainEndNumber(this.engineInt);
-        computerPlayer.playerTrain.setTrainEndNumber(this.engineInt);
-    }
+
 
     public int playTile(Tile userTile, char trainToPlayOn) {
         int humanPipsValue = 0;
@@ -225,82 +321,9 @@ public class Round {
         return true;
     }
 
-    public String getHumanAndComputerTrain(){
-        String trains = computerPlayer.trainAsString()  + " " + engineInt + " - " + engineInt + " " + humanPlayer.trainAsString();
-        return trains;
-    }
 
-    public Hand getHumanHand() {
-        return this.humanPlayer.getHand();
-    }
-    public Hand getComputerHand() {
-        return this.computerPlayer.getHand();
-    }
 
-    public void setPlayableTrains(){
-        //orphan double check
-        //if false, then get marker on cpu train and set human to playable
-        this.humanPlayer.humanTrainPlayable = true;
-    }
 
-    public boolean getHumanTurn() {
-        return this.humanTurn;
-    }
-
-    public String getMexicanTrain() {
-        return mexicanTrain.trainAsString();
-    }
-
-    public boolean getWinner() {
-        if(humanWon) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public void setEngineInt(int engineVal) {
-        if (engineQueue.isEmpty()) {
-            resetEngineQueue();
-        }
-        while (this.engineInt != engineVal) {
-            engineInt = getNextEngineValue();
-        }
-
-    }
-
-    public int getEngineValue() {
-        return this.engineInt;
-    }
 }
 
 
-
-/*
-    boolean playerHasValidMove = humanPlayer.existsValidMove(humanPlayer, humanPlayer, mexicanTrain);
-
-        if (playerHasValidMove == false) {
-                //get bottomText so we can update it based on what happens
-                LinearLayout gameFeed = (LinearLayout) this.activity.findViewById(R.id.gameInstructionLL);
-                TextView bottomText = (TextView) new TextView(this.activity);
-                //go through procedure for when a user has no playable tiles.
-                boolean skipTurn = humanPlayer.noPlayableTiles(humanPlayer, humanPlayer, mexicanTrain, boneyard);
-                if (skipTurn == false) { //the tile the user picked is not playable,so place a marker on their train and skip their turn
-                computerTurn = true;
-                humanTurn = false;
-                //BURBUR maybe have a startComputerTurn function that we kickoff.
-                //tile drawn is not playable, place marker and skip turn
-                //BURBUR NEED TO ADD MARKER TO TRAIN.
-
-                bottomText.setText("You had no valid move and The tile you picked from the boneyard is not playable. Computers Turn.");
-                gameFeed.addView(bottomText);
-                //startTurns(new Tile (-1,-1), ' ');
-                }
-                else { //tile picked is playable. play it.
-                bottomText.setText("The tile you picked from the boneyard is playable. Restarting turn.");
-                gameFeed.addView(bottomText);
-                }
-
-                }
-                */
