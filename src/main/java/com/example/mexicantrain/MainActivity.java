@@ -53,17 +53,16 @@ public class MainActivity extends AppCompatActivity {
             // so it can manipulate the data/file as needed.
 
             if(getIntent().hasExtra(INTENT_LOAD_GAME_NAME)) {
-                String loadGameFileName = getIntent().getStringExtra(INTENT_LOAD_GAME_NAME);
-                Log.d("myTag", loadGameFileName);
-                //get the integer id that represents the file we want to open.
-                //move this to welcome screen class and pass in the id?
-                int fileId =  getResources().getIdentifier(loadGameFileName,"raw", "com.example.mexicantrain");
-                //create input stream object.
-                InputStream input = getResources().openRawResource(fileId);
-                //open scanner based on input stream line defined above. th
-                Scanner scan = new Scanner(input);
+                //int loadGameFileInt = getIntent().getIntExtra(INTENT_LOAD_GAME_NAME, -1);
 
-                game.loadGame(loadGameFileName);
+                String fileName = getIntent().getStringExtra(INTENT_LOAD_GAME_NAME);
+                //InputStream fileInputStream = this.getBaseContext().getResources().openRawResource(R.raw.case1);
+                //int testfileId = this.getBaseContext().getResources().getIdentifier("case2","raw", this.getBaseContext().getPackageName());
+
+                int fileId = this.getBaseContext().getResources().getIdentifier(fileName, "raw", this.getBaseContext().getPackageName());
+                InputStream fileInputStream = getBaseContext().getResources().openRawResource(fileId);
+                Scanner loadGameScanner = new Scanner(fileInputStream);
+                game.loadGame(loadGameScanner);
             }
         }
         //increment round number.
