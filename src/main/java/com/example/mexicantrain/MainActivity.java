@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        boolean serializedStart = false;
         //gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
         //Load intent data
         if(getIntent() != null) {
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(getIntent().hasExtra(INTENT_LOAD_GAME_NAME)) {
                 //int loadGameFileInt = getIntent().getIntExtra(INTENT_LOAD_GAME_NAME, -1);
-
+                serializedStart = true;
                 String fileName = getIntent().getStringExtra(INTENT_LOAD_GAME_NAME);
                 //InputStream fileInputStream = this.getBaseContext().getResources().openRawResource(R.raw.case1);
                 //int testfileId = this.getBaseContext().getResources().getIdentifier("case2","raw", this.getBaseContext().getPackageName());
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         humanScoreLabel.setText("Human Score: " + Integer.toString(game.getHumanScore()));
 
 
-        game.playGame();
+        game.playGame(serializedStart);
         //remove all tiles from players hand
         /*
         while( game.getHumanHand().getSize() > 0) {
@@ -175,6 +176,15 @@ public class MainActivity extends AppCompatActivity {
             else {
                 row4.addView(element);
             }
+        }
+        //display top of boneyard
+        TextView topOfBoneyard = (TextView) findViewById(R.id.topOfBoneyard);
+        Tile boneyard = game.getTopOfBoneyard();
+        if(boneyard.getFirstNum() == -1 && boneyard.getSecondNum() == -1) {
+            topOfBoneyard.setText("Empty");
+        }
+        else {
+            topOfBoneyard.setText(boneyard.tileAsString());
         }
         displayComputerHand();
 

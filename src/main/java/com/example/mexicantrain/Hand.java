@@ -30,6 +30,9 @@ public class Hand {
      */
     public Tile getTile(int index) {
         //BURBUR error checking
+        if(hand.size() == 0) {
+            return new Tile(-1,-1);
+        }
         return hand.get(index);
     }
 

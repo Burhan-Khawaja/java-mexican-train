@@ -238,7 +238,7 @@ public class Round {
             //BURBUR REMOVE ENGINE TILE
             this.engineInt = getNextEngineValue();
             setTrainEndNumbers();
-            humanPlayer.addTileToHand(new Tile(9,9));
+            //humanPlayer.addTileToHand(new Tile(9,9));
             //BURBUR who goes first
             humanTurn = true;
         }
@@ -322,8 +322,98 @@ public class Round {
     }
 
 
+    public void setPlayerHand(ArrayList<Tile> tiles, int whoseHand) {
+        for (int i = 0; i < tiles.size(); i++) {
+            if (whoseHand == 0) {
+                //add to computer hand
+                computerPlayer.addTileToHand(tiles.get(i));
+            }
+            else if (whoseHand == 1) {
+                //add to human hand
+                humanPlayer.addTileToHand(tiles.get(i));
+            }
+            else if (whoseHand == 2) {
+                //add to boneyard.
+                boneyard.addTile(tiles.get(i));
+            }
+        }
 
+    }
 
+    public void setPlayerTrain(ArrayList<Tile> tiles, int whoseTrain) {
+        if (tiles.isEmpty()) {
+            return;
+        }
+        for (int i = 0; i < tiles.size(); i++) {
+            //set train values
+            if (whoseTrain == 0) {
+                //add to computer hand
+                computerPlayer.addTileFront(tiles.get(i));
+            }
+            else if (whoseTrain == 1) {
+                //add to human hand
+                humanPlayer.addTileBack(tiles.get(i));
+            }
+            else if (whoseTrain == 2) {
+                //add to boneyard.
+                mexicanTrain.addTileBack(tiles.get(i));
+            }
+        }
+
+        //set train end numbers.
+        //also check front of computer train/back of human train and mexican train for orphan doubles.
+        if (whoseTrain == 0) {
+            //set computer train end number
+            computerPlayer.setTrainEndNumber(tiles.get(tiles.size() - 1).getFirstNum());
+            if (tiles.get(tiles.size() - 1).isDouble()) {
+                //set orphan double
+                computerPlayer.setOrphanDouble();
+            }
+        }
+        else if (whoseTrain == 1) {
+            //set human train end number
+            humanPlayer.setTrainEndNumber(tiles.get(tiles.size() - 1).getSecondNum());
+            if (tiles.get(tiles.size() - 1).isDouble()) {
+                //set orphan double
+                humanPlayer.setOrphanDouble();
+            }
+        }
+        else if (whoseTrain == 2) {
+            //set mexican train end number
+            mexicanTrain.setTrainEndNumber(tiles.get(tiles.size() - 1).getSecondNum());
+            if (tiles.get(tiles.size() - 1).isDouble()) {
+                //set orphan double
+                mexicanTrain.setOrphanDouble(true);
+            }
+        }
+
+    }
+
+    public Tile getTopOfBoneyard() {
+        return this.boneyard.getTile(0);
+    }
+
+    public void setComputerTurn() {
+        this.computerTurn = true;
+        this.humanTurn = false;
+
+    }
+
+    public void setHumanTurn() {
+        this.humanTurn = true;
+        this.computerTurn = false;
+
+    }
+
+    public void setTrainMarker(int whoseTrain) {
+        if(whoseTrain == 0) {
+            //set computer marker
+            computerPlayer.setTrainMarker();
+        }
+        else if (whoseTrain == 1){
+            humanPlayer.setTrainMarker();
+        }
+    }
 }
 
 

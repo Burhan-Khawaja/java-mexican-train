@@ -396,4 +396,12 @@ public abstract class Player {
     public boolean getOrphanDouble() {
         return this.playerTrain.getOrphanDouble();
     }
+
+    public void setTrainEndNumber(int newEndNumber){
+        this.playerTrain.setTrainEndNumber(newEndNumber);
+    }
+
+    public void setOrphanDouble() {
+        playerTrain.setOrphanDouble(true);
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Game {
@@ -23,9 +24,9 @@ public class Game {
     }
 
 
-    public void playGame() {
+    public void playGame(boolean serializedStart) {
         //BURBUR serialized start -- need to include that
-        round.startRound(false,humanScore,computerScore,roundNumber);
+        round.startRound(serializedStart,humanScore,computerScore,roundNumber);
     }
 
     public String getHumanAndComputerTrain() {
@@ -104,7 +105,7 @@ public class Game {
 
         while(loadGameFile.hasNextLine()) {
             //create words to track what we are tracking
-            String firstWord, secondWord, thirdWord;
+            String firstWord;
             //get the entire line of the file
             //firstWord = loadGameFile.next();
             String line = loadGameFile.nextLine();
@@ -146,24 +147,90 @@ public class Game {
                     continue;
                 }
                 else if (arrOfWords[3].equals("Hand:")) {
-                    parseLineOfTiles(line, humanData);
+                    ArrayList<Tile> tiles = parseLineOfTiles(line, humanData);
+                    if(computerData) {
+                        round.setPlayerHand(tiles, 0);
+                    }
+                    else {
+                        round.setPlayerHand(tiles,1);
+                    }
                 }
                 else if(arrOfWords[3].equals("Train:")) {
-                    parseLineOfTiles(line, humanData);
+                    ArrayList<Tile> tiles =  parseLineOfTiles(line, humanData);
+                    if(computerData){
+                        //back of train contains engine that we dont want to print, so pop it off
+                        tiles.remove(tiles.size()-1);
+                        //reverse tiles so it prints to screen normally.
+                        Collections.reverse(tiles);
+                        round.setPlayerTrain(tiles, 0);
+
+                    }
+                    else {//human train
+                        round.setEngineInt(tiles.get(0).getFirstNum());
+                        tiles.remove(0);
+                        round.setPlayerTrain(tiles, 1);
+
+                    }
                 }
             }
             if(firstWord.equals("Mexican")) {
+                computerData = false;
+                humanData = false;
                 //do stuff.
+                ArrayList<Tile> tiles = parseLineOfTiles(line, humanData);
+                round.setPlayerTrain(tiles,2);
+                continue;
             }
-
+            if(firstWord.equals("Boneyard:")) {
+                ArrayList<Tile> tiles = parseLineOfTiles(line, humanData);
+                round.setPlayerHand(tiles,2);
+                continue;
+            }
+            if(firstWord.equals("Next")) {
+                //next word is player, word after that is human or computer
+                String whoseTurn = arrOfWords[2];
+                if(whoseTurn.equals("Computer")) {
+                    round.setComputerTurn();
+                }
+                else {
+                    round.setHumanTurn();
+                }
+            }
         }
     }
 
     ArrayList<Tile> parseLineOfTiles(String line, boolean humanData) {
         ArrayList<Tile> tileArray = new ArrayList<Tile>();
         String[] arrOfTiles = line.split(" ");
+        if(arrOfTiles[0].equals("Mexican")) {
+            //mexican train.
+            for(int i = 2; i < arrOfTiles.length; i++) {
+                int fnum = Integer.parseInt(String.valueOf(arrOfTiles[i].charAt(0)));
+                int snum = Integer.parseInt(String.valueOf(arrOfTiles[i].charAt(2)));
+                tileArray.add(new Tile(fnum,snum));
+
+            }
+            return tileArray;
+        }
+        if(arrOfTiles[0].equals("Boneyard:")) {
+            for(int i = 1; i < arrOfTiles.length; i++) {
+                int fnum = Integer.parseInt(String.valueOf(arrOfTiles[i].charAt(0)));
+                int snum = Integer.parseInt(String.valueOf(arrOfTiles[i].charAt(2)));
+                tileArray.add(new Tile(fnum,snum));
+            }
+            return tileArray;
+
+        }
         if(arrOfTiles[4].equals("M")) {
             //SET MARKER
+            if(humanData) {
+                //set human train marker
+                round.setTrainMarker(1);
+            }
+            else {
+                //else set computer train marker
+                round.setTrainMarker(0);
+            }
             Log.d("loadGame", "Set marker!" );
         }
         if(arrOfTiles[4].equals("Mexican")) {
@@ -179,6 +246,12 @@ public class Game {
         for(int i = 5; i < arrOfTiles.length; i++) {
             if(arrOfTiles[i].equals("M")){
                 //do stuff
+                if(humanData) {
+                    round.setTrainMarker(1);
+                }
+                else {
+                    round.setTrainMarker(0);
+                }
                 return tileArray;
             }
             int fnum = Integer.parseInt(String.valueOf(arrOfTiles[i].charAt(0)));
@@ -187,6 +260,7 @@ public class Game {
         }
         return tileArray;
     }
+
 
     private void setHumanScore(int scoreAsInt) {
         this.humanScore = scoreAsInt;
@@ -197,5 +271,8 @@ public class Game {
         this.computerScore = scoreAsInt;
     }
 
+    public Tile getTopOfBoneyard() {
+        return this.round.getTopOfBoneyard();
+    }
 }
 
