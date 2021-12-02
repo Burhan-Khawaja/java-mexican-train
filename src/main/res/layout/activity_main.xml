@@ -7,12 +7,55 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <Button
+        android:id="@+id/makeMoveButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Make A Move"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/saveGameButton" />
+
+    <Button
+        android:id="@+id/saveGameButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Save Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/helpButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="8dp"
+        android:text="Ask for Help"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/makeMoveButton" />
+
+    <Button
+        android:id="@+id/quitGameButton"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Quit Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toEndOf="@+id/helpButton" />
+
     <TextView
         android:id="@+id/humanScoreLabel"
         android:layout_width="106dp"
         android:layout_height="42dp"
         android:layout_marginStart="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/trains"
         app:layout_constraintStart_toEndOf="@+id/roundLabel"
@@ -42,65 +85,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <HorizontalScrollView
-        android:id="@+id/allTrains"
-        android:layout_width="370dp"
-        android:layout_height="29dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/mexicanTrain"
+    <ScrollView
+        android:id="@+id/gameInstruction"
+        android:layout_width="420dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="92dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintHorizontal_bias="0.111"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SpeakableTextPresentCheck">
 
         <LinearLayout
-            android:id="@+id/allTrainsLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </HorizontalScrollView>
-
-    <TableLayout
-        android:id="@+id/computerHand"
-        android:layout_width="382dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="60dp"
-        app:layout_constraintBottom_toTopOf="@+id/gameInstruction"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TableRow
-            android:id="@+id/computerHandRow1"
+            android:id="@+id/gameInstructionLL"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/computerHandRow2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/computerHandRow3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:id="@+id/computerHandRow4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
-
-    <TextView
-        android:id="@+id/trains"
-        android:layout_width="67dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="8dp"
-        android:text="Trains:"
-        app:layout_constraintBottom_toTopOf="@+id/allTrains"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
-        app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <TableLayout
         android:id="@+id/playerHand"
@@ -109,7 +111,7 @@
         android:layout_marginBottom="52dp"
         app:layout_constraintBottom_toTopOf="@+id/computerHandLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.294"
+        app:layout_constraintHorizontal_bias="0.29"
         app:layout_constraintStart_toStartOf="parent">
 
         <TableRow
@@ -144,6 +146,17 @@
     </TableLayout>
 
     <TextView
+        android:id="@+id/trains"
+        android:layout_width="67dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="8dp"
+        android:text="Trains:"
+        app:layout_constraintBottom_toTopOf="@+id/allTrains"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
         android:id="@+id/computerHandLabel"
         android:layout_width="107dp"
         android:layout_height="25dp"
@@ -151,7 +164,7 @@
         android:text="Computer Hand"
         app:layout_constraintBottom_toTopOf="@+id/computerHand"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent" />
 
     <HorizontalScrollView
@@ -162,7 +175,7 @@
         android:layout_marginBottom="12dp"
         app:layout_constraintBottom_toTopOf="@+id/humanHandLabel"
         app:layout_constraintEnd_toEndOf="@+id/allTrains"
-        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SpeakableTextPresentCheck">
 
@@ -172,23 +185,75 @@
             android:layout_height="match_parent" />
     </HorizontalScrollView>
 
-    <ScrollView
-        android:id="@+id/gameInstruction"
-        android:layout_width="420dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="12dp"
+        android:text="Top of Boneyard:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerHand" />
+
+    <TextView
+        android:id="@+id/topOfBoneyard"
+        android:layout_width="81dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="12dp"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.305"
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintStart_toEndOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/playerHand" />
+
+    <HorizontalScrollView
+        android:id="@+id/allTrains"
+        android:layout_width="370dp"
+        android:layout_height="29dp"
+        android:layout_marginBottom="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/mexicanTrain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="SpeakableTextPresentCheck">
 
         <LinearLayout
-            android:id="@+id/gameInstructionLL"
+            android:id="@+id/allTrainsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </HorizontalScrollView>
+
+    <TableLayout
+        android:id="@+id/computerHand"
+        android:layout_width="382dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/gameInstruction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow
+            android:id="@+id/computerHandRow1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:id="@+id/computerHandRow2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:id="@+id/computerHandRow3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:id="@+id/computerHandRow4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
 
     <TextView
         android:id="@+id/humanHandLabel"
@@ -200,26 +265,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.061"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="24dp"
-        android:text="Top of Boneyard:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerHand" />
-
-    <TextView
-        android:id="@+id/topOfBoneyard"
-        android:layout_width="81dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="24dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.09"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/playerHand" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

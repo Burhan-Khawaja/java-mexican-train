@@ -13,6 +13,9 @@ public abstract class Player {
     protected boolean humanTrainPlayable;
     protected boolean computerTrainPlayable;
     protected boolean mexicanTrainPlayable;
+    //string will store the last move played by the user
+    //this will be used so we can output to the screen what the player did.
+    protected String moveExplanation;
 
     public Hand getHand() {
         return this.playerHand;
@@ -403,5 +406,17 @@ public abstract class Player {
 
     public void setOrphanDouble() {
         playerTrain.setOrphanDouble(true);
+    }
+
+    public void setStringMoveExplanation(String s) {
+        this.moveExplanation += s;
+    }
+
+    public void resetStringMoveExplanation() {
+        this.moveExplanation = "";
+    }
+
+    public String getMoveExplanation() {
+        return this.moveExplanation;
     }
 }

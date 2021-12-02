@@ -49,7 +49,7 @@ public class Human extends Player {
         }
 
         boolean playerHasValidMove = existsValidMove(humanPlayer,computerPlayer,mexicanTrain);
-
+        //BURBURBURBUR PLAYERHASVALIDMOVE NOTHINGIS DONE WITH IT SO WE GO IN ENDLESS LOOP.
         //check that user can play on selected train
         boolean validTrainSelected = checkUserTrainPlayable(trainToPlay);
         if(validTrainSelected == false ) {
@@ -65,7 +65,8 @@ public class Human extends Player {
         }
         else if(trainToPlay == 'c' && tileFitsOnTrain(tileToPlay, computerPlayer.getTrainEndNumber())) {
             Log.d("myTag", "User playing on COMPUTER train.");
-
+            computerPlayer.playerTrain.addTileFront(tileToPlay);
+            validMoveSelected = true;
             //do stuff
         }
         else if(trainToPlay == 'm' && tileFitsOnTrain(tileToPlay,mexicanTrain.getTrainEndNumber())) {

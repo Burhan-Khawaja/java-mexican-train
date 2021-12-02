@@ -31,7 +31,8 @@ public class Computer extends Player{
             return 0;
         }
         findBestMove(humanPlayer,computerPlayer,mexicanTrain, boneyard,bestTilesToPlay,trainsToPlayOn);
-        interpretBestMove(bestTilesToPlay, trainsToPlayOn);
+        String cpuMoveExplanation = interpretBestMove(bestTilesToPlay, trainsToPlayOn);
+        this.setStringMoveExplanation(cpuMoveExplanation);
         if(!bestTilesToPlay.isEmpty()) {
             for(int i = 0; i < bestTilesToPlay.size(); i++) {
                 if( trainsToPlayOn.get(i) == "c") {

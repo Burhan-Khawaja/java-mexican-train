@@ -33,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button makeAMoveButton = (Button) findViewById(R.id.makeMoveButton);
+        makeAMoveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("mytag","makeAMove onclick created.");
+                makeAMove();
+            }
+        });
+
         boolean serializedStart = false;
         //gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
         //Load intent data
@@ -50,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
             if(getIntent().hasExtra(INTENT_ROUND_ENGINEINT)) {
                 game.setEngineInt(getIntent().getIntExtra(INTENT_ROUND_ENGINEINT, -1));
             }
+
             //load game. open the file in mainActivity and pass it to game class
             // so it can manipulate the data/file as needed.
-
             if(getIntent().hasExtra(INTENT_LOAD_GAME_NAME)) {
                 //int loadGameFileInt = getIntent().getIntExtra(INTENT_LOAD_GAME_NAME, -1);
                 serializedStart = true;
@@ -133,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
                 TextView text = new TextView(this);
                 Log.d("myTag", "The tile you picked from the boneyard is not playable, skipping turn.");
                 //kickoff computer turn here.
-                this.game.playTile(new Tile(-1,-1), ' ');
+                // PLAYCOMPUTERTURN
+                //this.game.playTile(new Tile(-1,-1), ' ');
                 //text.setText("Error: You have no move, and picked a tile from the boneyard");
                 //gameFeed.addView(text, gameFeed.getChildCount() - 1);
                 //set computer turn to true?
@@ -334,8 +343,16 @@ public class MainActivity extends AppCompatActivity {
             game.playAgain();
         }
         if (value == 0) {
+            game.setComputerTurn();
             //human turn over, computer turn now.
-            game.playTile(new Tile(-1, -1), ' ');
+            //COMPUTER TURN STARTS HERE. INSTEAD OF THIS, MAKE AN ONCLICK FUNCTION
+            //THAT WILL START THIS LINE OF CODE HDFLJSHFL;JKASDHFSFKLBFSAFSDA I FIGURED IT OUT WOOOO
+            //LETS GOOOOOOOOio
+
+            //game.playTile(new Tile(-1, -1), ' ');
+        }
+        if(value == -1) {
+            //train does not fit on tile
         }
         if(value == -22) {
             Log.d("myTag", "Error: User played on an invalid train. Choose again.");
@@ -347,5 +364,27 @@ public class MainActivity extends AppCompatActivity {
         }
         displayTrains();
         displayHand();
+    }
+
+    public void makeAMove() {
+
+        if(game.getHumanTurn()) {
+            //add to box click a tile and select a train to play
+        }
+        else if(!game.getHumanTurn()) {
+            this.game.playTile(new Tile(-1,-1), ' ');
+            game.setHumanTurn();
+            addGameFeedMessage(game.getComputerMoveExplanation());
+            displayTrains();
+            displayHand();
+        }
+    }
+
+    public void addGameFeedMessage(String s) {
+        LinearLayout gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
+        gameFeed.removeAllViews();
+        TextView tmpText = new TextView(this);
+        tmpText.setText(s);
+        gameFeed.addView(tmpText);
     }
 }
