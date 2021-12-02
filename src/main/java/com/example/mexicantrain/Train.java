@@ -96,6 +96,13 @@ public class Train {
      * @param tileToAdd Object of Tile type that will be added to train
      */
     public void addTileFront(Tile tileToAdd) {
+        if (tileToAdd.getFirstNum() == getTrainEndNumber()) {
+            setTrainEndNumber(tileToAdd.getSecondNum());
+            tileToAdd.swapNumbers();
+        }
+        else if (tileToAdd.getSecondNum() == getTrainEndNumber()) {
+            setTrainEndNumber(tileToAdd.getFirstNum());
+        }
         this.trainDeque.addFirst(tileToAdd);
     }
     //utility methods

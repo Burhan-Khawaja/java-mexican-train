@@ -264,7 +264,6 @@ public class Game {
 
     private void setHumanScore(int scoreAsInt) {
         this.humanScore = scoreAsInt;
-
     }
 
     private void setComputerScore(int scoreAsInt) {
@@ -273,6 +272,21 @@ public class Game {
 
     public Tile getTopOfBoneyard() {
         return this.round.getTopOfBoneyard();
+    }
+
+    public void setHumanTurn() {
+        this.round.setHumanTurn();
+    }
+    public void setComputerTurn() {
+        this.round.setComputerTurn();
+    }
+
+    public String getHumanMoveExplanation(){
+        return this.round.getHumanMoveExplanation();
+    }
+
+    public String getComputerMoveExplanation(){
+        return this.round.getComputerMoveExplanation();
     }
 }
 

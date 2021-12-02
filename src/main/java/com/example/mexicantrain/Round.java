@@ -2,7 +2,6 @@ package com.example.mexicantrain;
 
 import android.app.Activity;
 import android.util.Log;
-import android.widget.TextView;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -132,7 +131,11 @@ public class Round {
     public void setPlayableTrains(){
         //orphan double check
         //if false, then get marker on cpu train and set human to playable
-        this.humanPlayer.humanTrainPlayable = true;
+        if(humanPlayer.checkOrphanDoubles(humanPlayer,computerPlayer,mexicanTrain) == false) {
+            humanPlayer.humanTrainPlayable = true;
+            humanPlayer.computerTrainPlayable= humanPlayer.getTrainMarker();
+            humanPlayer.mexicanTrainPlayable = true;
+        }
     }
 
     /**
@@ -275,7 +278,7 @@ public class Round {
             return humanPipsValue;
         }
 
-        if(computerTurn == true) {
+        if(computerTurn == true && userTile.getFirstNum() == -1 && userTile.getSecondNum() == -1) {
             Log.d("myTag", "COMPUTER TURN");
             //bottomText.setText("COMPUTER TURN!");
             //gameFeed.addView(bottomText);
@@ -285,9 +288,6 @@ public class Round {
             humanTurn = true;
             //after computer is done with its turn, display round state.
             //displayRoundState();
-
-            TextView bottomText2 = (TextView) new TextView(this.activity);
-            bottomText2.setText("Computers Turn finished, Humans turn now. Select a tile.");
             return computerPipsValue;
         }
         return 0;
@@ -295,7 +295,7 @@ public class Round {
 
 
     public boolean playerHasValidMove() {
-        boolean existsValidMove = humanPlayer.existsValidMove(humanPlayer, humanPlayer, mexicanTrain);
+        boolean existsValidMove = humanPlayer.existsValidMove(humanPlayer, computerPlayer, mexicanTrain);
 
         //-1: Player does not have a valid move.
         //-666: boneyard is empty and player has to skip tern.
@@ -303,7 +303,7 @@ public class Round {
         //player does not have a valid move.
         if (existsValidMove == false) {
             //go through procedure for when a user has no playable tiles.
-            boolean skipTurn = humanPlayer.noPlayableTiles(humanPlayer, humanPlayer, mexicanTrain, boneyard);
+            boolean skipTurn = humanPlayer.noPlayableTiles(humanPlayer, computerPlayer, mexicanTrain, boneyard);
             //the tile the user picked is not playable,so place a marker on their train and skip their turn
             if (skipTurn == false) {
                 computerTurn = true;
@@ -413,6 +413,14 @@ public class Round {
         else if (whoseTrain == 1){
             humanPlayer.setTrainMarker();
         }
+    }
+
+    public String getHumanMoveExplanation(){
+        return this.humanPlayer.getMoveExplanation();
+    }
+
+    public String getComputerMoveExplanation(){
+        return this.computerPlayer.getMoveExplanation();
     }
 }
 
