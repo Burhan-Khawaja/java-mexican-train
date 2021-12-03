@@ -17,14 +17,22 @@ public abstract class Player {
     //this will be used so we can output to the screen what the player did.
     protected String moveExplanation;
 
+    /**
+    * get a players hand as a Hand object. Used to print to screen
+    *@return Hand object that represents a players hand
+    */
     public Hand getHand() {
         return this.playerHand;
     }
 
+    /**
+    * get the hand as an arrayList
+    * @return ArrayList<Tile> that represents all the players hand
+    */
     public ArrayList<Tile> getHandArrayList() {
         return this.playerHand.getHandArrayList();
     }
-
+    //BURBUR why do we have the 2 things above they are the same thing
 
     /**
      * Add a tile to a players hand
@@ -34,16 +42,20 @@ public abstract class Player {
         playerHand.addTile(tileToAdd);
     }
 
+    /**
+    *Set a players train marker to true
+    */
     public void setTrainMarker() {
         this.playerTrain.setMarker(true);
     }
+
     /**
      * set the member variable activity so we can access gui
      * @param _activity Activity object
      */
     public void setActivity(Activity _activity) {
         this.activity = _activity;
-    }
+    }//BURBUR does this need to be here?
 
     /**
      * Checks if a players hand is empty
@@ -56,18 +68,39 @@ public abstract class Player {
         return false;
     }
 
+    /**
+    * returns the entirety of a players train as a string
+    *@return String that represents the players train
+    */
     public String trainAsString(){
         return playerTrain.trainAsString();
     }
 
+    /**
+    * Add a tile to the front of a players train, at index 0
+    *@param tileToAdd tile object that gets added to train
+    */
     public void addTileFront(Tile tileToAdd) {
         playerTrain.addTileFront(tileToAdd);
     }
 
+    /**
+    * add a tile to the back of a players train at index size()
+    *@param tileToAdd tile object that gets added to train
+    */
     public void addTileBack(Tile tileToAdd) {
         playerTrain.addTileBack(tileToAdd);
     }
 
+    /**
+    *Start a players turn
+    *@param humanPlayer Player object that holds human player data
+    *@param computerPlayer Player object that holds computer player data
+    *@param mexicanTrain Train object that holds all mexicanTrain data
+    *@param Boneyard Hand object that stores all of the tiles in boneyard
+    *@param tileToPlay Tile object that represents the tile that the user is playing
+    *@param trainToPlay char that represents what train user is playing on.
+    */
     abstract int play(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand Boneyard, Tile tileToPlay, char trainToPlay);
 
     public boolean tileFitsOnTrain(Tile tileToCheck, int trainEndNumber) {
