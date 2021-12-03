@@ -37,7 +37,7 @@ public class Round {
     //BURBUR MIGHT NOT NEED ACTIVITY CLASS
     /**
      * Constructor for Round class
-     * @param activity
+     * @param activity Activity object used to change display. this variable is unused since we have shifted to an MVC model
      */
     Round(Activity activity) {
         this.activity = activity;
@@ -231,7 +231,14 @@ public class Round {
     }
 
 
-
+    /**
+    *Start the round class and initialize all round data.
+    *@param serializedStart boolean value that tracks whether we load a game or start a new one
+    *@param humanScore integer value that stores the humans score
+    *@param computerScore integer value that stores the computers score
+    *@param roundNumber integer value that stores the current round number
+    *@return integer value that //BURBUR should be a void function
+     */
     public int startRound(boolean serializedStart, int humanScore, int computerScore, int roundNumber) {
 
 
@@ -253,7 +260,11 @@ public class Round {
     }
 
 
-
+    /**
+    *@param userTile Tile object that is what the user chose to play.
+    *@param trainToPlayOn character that represents what train the user wants to play on 
+    *@return integer value that repreents a code based on what happened
+     */
     public int playTile(Tile userTile, char trainToPlayOn) {
         int humanPipsValue = 0;
         int computerPipsValue = 0;
@@ -293,7 +304,10 @@ public class Round {
         return 0;
     }
 
-
+    /**
+    *checks if a player has a valid move.
+    @return boolean value, true if user has a move, false if user has to skip their turn after drawing from boneyard
+     */
     public boolean playerHasValidMove() {
         boolean existsValidMove = humanPlayer.existsValidMove(humanPlayer, computerPlayer, mexicanTrain);
 
@@ -321,7 +335,11 @@ public class Round {
         return true;
     }
 
-
+    /**
+    * Set a player hand equal to an ArrayList passed in, used for serialization
+    *@param tiles ArrayList of Tiles that stores a players hand
+    *@param whoseHand integer value that represents whose hand we are setting: 0 if its computers, 1 is human, 2 for boneyard
+    */
     public void setPlayerHand(ArrayList<Tile> tiles, int whoseHand) {
         for (int i = 0; i < tiles.size(); i++) {
             if (whoseHand == 0) {
@@ -340,6 +358,11 @@ public class Round {
 
     }
 
+    /**
+    * Set a player train equal to an ArrayList passed in, used for serialization
+    *@param tiles ArrayList of Tiles that stores a players train
+    *@param whoseHand integer value that represents whose hand we are setting: 0 if its computers, 1 is human, 2 for boneyard
+    */
     public void setPlayerTrain(ArrayList<Tile> tiles, int whoseTrain) {
         if (tiles.isEmpty()) {
             return;
@@ -389,22 +412,36 @@ public class Round {
 
     }
 
+    /**
+    *Return the tile thats at the top of boneyard
+    *@return Tile object that is the top tile of the boneyard
+    */
     public Tile getTopOfBoneyard() {
         return this.boneyard.getTile(0);
     }
 
+    /**
+    * set the computer turn to true and human turn to false
+    */
     public void setComputerTurn() {
         this.computerTurn = true;
         this.humanTurn = false;
 
     }
 
+    /**
+    * set the human turn to true and computer turn to false
+    */
     public void setHumanTurn() {
         this.humanTurn = true;
         this.computerTurn = false;
 
     }
 
+    /**
+    * set the players train marker to be toggled on 
+    *@param whoseTrain - integer value that represents whose train we are marking, 0 for computer train and 1 for human train
+    */
     public void setTrainMarker(int whoseTrain) {
         if(whoseTrain == 0) {
             //set computer marker
@@ -415,10 +452,17 @@ public class Round {
         }
     }
 
+    /**
+    *Get the human players move explination, and the string that represents what they did 
+    *@return String that represents what the human played
+    */
     public String getHumanMoveExplanation(){
         return this.humanPlayer.getMoveExplanation();
     }
-
+    /**
+    *Get the computers players move explination, and the string that represents what they did
+    *@return String that repreents what the computer played.
+    */
     public String getComputerMoveExplanation(){
         return this.computerPlayer.getMoveExplanation();
     }
