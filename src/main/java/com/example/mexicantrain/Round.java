@@ -54,7 +54,14 @@ public class Round {
      * @return String that is both trains concatenated with the engine tile
      */
     public String getHumanAndComputerTrain(){
-        String trains = computerPlayer.trainAsString()  + " " + engineInt + " - " + engineInt + " " + humanPlayer.trainAsString();
+        String trains = "";
+        if(computerPlayer.getTrainMarker()) {
+            trains += " M ";
+        }
+        trains += computerPlayer.trainAsString()  + " " + engineInt + " - " + engineInt + " " + humanPlayer.trainAsString();
+        if(humanPlayer.getTrainMarker()) {
+            trains += " M ";
+        }
         return trains;
     }
 
@@ -367,7 +374,7 @@ public class Round {
             computerPlayer.setTrainEndNumber(tiles.get(tiles.size() - 1).getFirstNum());
             if (tiles.get(tiles.size() - 1).isDouble()) {
                 //set orphan double
-                computerPlayer.setOrphanDouble();
+                computerPlayer.setOrphanDouble(true);
             }
         }
         else if (whoseTrain == 1) {
@@ -375,7 +382,7 @@ public class Round {
             humanPlayer.setTrainEndNumber(tiles.get(tiles.size() - 1).getSecondNum());
             if (tiles.get(tiles.size() - 1).isDouble()) {
                 //set orphan double
-                humanPlayer.setOrphanDouble();
+                humanPlayer.setOrphanDouble(true);
             }
         }
         else if (whoseTrain == 2) {
@@ -421,6 +428,23 @@ public class Round {
 
     public String getComputerMoveExplanation(){
         return this.computerPlayer.getMoveExplanation();
+    }
+
+    public void clearHumanMoveExplanation() {
+        this.humanPlayer.clearMoveExplanation();
+    }
+
+    public void clearComputerMoveExplanation() {
+        this.computerPlayer.clearMoveExplanation();
+    }
+
+    public void getBestHumanMove() {
+        ArrayList<Tile> bestTiles = new ArrayList<Tile>();
+        ArrayList<String> bestTrains = new ArrayList<String>();
+        humanPlayer.findBestMove(humanPlayer,computerPlayer,mexicanTrain, boneyard, bestTiles, bestTrains);
+        String bestMove = humanPlayer.interpretBestMove(bestTiles,bestTrains);
+        humanPlayer.setStringMoveExplanation(" The computer suggests: " + bestMove);
+
     }
 }
 

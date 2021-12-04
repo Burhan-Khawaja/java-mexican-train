@@ -43,25 +43,26 @@ public class Computer extends Player{
                     }
                     //also check for an orphan double and clear it if it exists.
                     if (computerPlayer.getOrphanDouble()) {
-                        //computerPlayer->resetOrphanDouble();
+                        computerPlayer.setOrphanDouble(false);
                     }
                 }
                 else if( trainsToPlayOn.get(i) == "h") {
                     humanPlayer.addTileBack(bestTilesToPlay.get(i));
                     //add the tile to the human train, and check for an orphan double.
                     if (humanPlayer.getOrphanDouble()) {
-                        //BURBUR RESET ORPHAN DOUBLE FUNCTION HERE. humanPlayer.resetOrphanDouble();
+                        humanPlayer.setOrphanDouble(false);
                     }
                 }
                 else {//mexican train is being played on
                     mexicanTrain.addTileBack(bestTilesToPlay.get(i));
                     if(mexicanTrain.getOrphanDouble()) {
-                        //BURBUR RESET ORPHAN DOUBLE HERE.
+                        mexicanTrain.setOrphanDouble(false);
                     }
                 }
                 computerPlayer.playerHand.removeTile(bestTilesToPlay.get(i).getFirstNum(), bestTilesToPlay.get(i).getSecondNum());
                 if(computerPlayer.playerHand.getSize() == 0) {
                     //BURBUR GAME IS WON HERE.
+                    return humanPlayer.sumOfPips();
                 }
             }
         }

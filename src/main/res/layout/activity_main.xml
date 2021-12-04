@@ -7,6 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/whoseTurnLabel"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.741"
+        app:layout_constraintStart_toEndOf="@+id/computerScoreLabel"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/makeMoveButton"
         android:layout_width="80dp"
@@ -21,7 +35,7 @@
         android:id="@+id/saveGameButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:text="Save Game"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +45,7 @@
         android:id="@+id/helpButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:text="Ask for Help"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +55,7 @@
         android:id="@+id/quitGameButton"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Quit Game"
@@ -52,43 +66,44 @@
 
     <TextView
         android:id="@+id/humanScoreLabel"
-        android:layout_width="106dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="24dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/trains"
         app:layout_constraintStart_toEndOf="@+id/roundLabel"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.166" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/computerScoreLabel"
-        android:layout_width="113dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.888"
         app:layout_constraintStart_toEndOf="@+id/humanScoreLabel"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/roundLabel"
-        android:layout_width="107dp"
-        android:layout_height="39dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:id="@+id/gameInstruction"
-        android:layout_width="420dp"
-        android:layout_height="70dp"
+        android:layout_width="398dp"
+        android:layout_height="110dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="92dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -228,7 +243,7 @@
         android:layout_width="382dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/gameInstruction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.23"

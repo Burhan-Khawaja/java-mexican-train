@@ -33,12 +33,6 @@ public class Human extends Player {
     }
 
     int play(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand boneyard, Tile tileToPlay, char trainToPlay) {
-        //store bottomText in a variable so we can manipulate it based on what user does.
-        //gameFeed stores what moves are happening in the game.
-        //BURBUR WE DO NOT UPDATE THE VIEW HERE
-        //LinearLayout gameFeed = (LinearLayout) this.activity.findViewById(R.id.gameInstructionLL);
-        //TextView bottomText = (TextView) new TextView(this.activity);
-
         boolean validMoveSelected = false;
 
         //set playable trains
@@ -54,6 +48,7 @@ public class Human extends Player {
         boolean validTrainSelected = checkUserTrainPlayable(trainToPlay);
         if(validTrainSelected == false ) {
             Log.d("myTag", "ERROR: Invalid train choice selected.");
+            setStringMoveExplanation("ERROR: Invalid train choice selected. Select a different tile and train ");
             return -22;
         }
 
@@ -61,20 +56,23 @@ public class Human extends Player {
             //user played on human train, and the tile actually fits!
             Log.d("myTag", "User playing on human train.");
             humanPlayer.playerTrain.addTileBack(tileToPlay);
+            setStringMoveExplanation("You played " + tileToPlay.tileAsString() + " on the human train" );
+
             validMoveSelected = true;
         }
         else if(trainToPlay == 'c' && tileFitsOnTrain(tileToPlay, computerPlayer.getTrainEndNumber())) {
             Log.d("myTag", "User playing on COMPUTER train.");
             computerPlayer.playerTrain.addTileFront(tileToPlay);
+            setStringMoveExplanation("You played " + tileToPlay.tileAsString() + " on the computer train" );
+
             validMoveSelected = true;
-            //do stuff
         }
         else if(trainToPlay == 'm' && tileFitsOnTrain(tileToPlay,mexicanTrain.getTrainEndNumber())) {
             mexicanTrain.addTileBack(tileToPlay);
             Log.d("myTag", "User playing on MEXICAN train.");
-            validMoveSelected = true;
+            setStringMoveExplanation("You played " + tileToPlay.tileAsString() + " on the mexican train" );
 
-            //do more stuff
+            validMoveSelected = true;
         }
 
         //remove selected tile from players hand.
@@ -89,23 +87,21 @@ public class Human extends Player {
         }
         else {
             Log.d("myTag", "User Entered an Invalid Tile");
-
-
-         //  bottomText.setText("Error: You played an invalid tile!");
-         //   gameFeed.addView(bottomText);
+            setStringMoveExplanation("You played an invalid tile! Select a different one" );
             return -1;
 
         }
         //check if humans hand is empty
-        //BURBUR for testing purposes remove all values from hand.
 
         //return certain values based on what the user train previously played on.
         if(tileToPlay.isDouble()) {
             //-123 is code for double tile played
+            setStringMoveExplanation("\nYou played a double tile! select another tile to play!");
             return -123;
         }
         else {
             Log.d("myTag", "Human Turn Over");
+            setStringMoveExplanation("\nYour turn is over. Click the make a move button for the computer to play its turn!");
             //returning 0 means successful turn.
             return 0;
         }

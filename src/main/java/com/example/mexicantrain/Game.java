@@ -288,5 +288,17 @@ public class Game {
     public String getComputerMoveExplanation(){
         return this.round.getComputerMoveExplanation();
     }
+
+    public void clearHumanMoveExplanation() {
+        this.round.clearHumanMoveExplanation();
+    }
+
+    public void clearComputerMoveExplanation() {
+        round.clearComputerMoveExplanation();
+    }
+
+    public void getBestHumanMove() {
+        round.getBestHumanMove();
+    }
 }
 

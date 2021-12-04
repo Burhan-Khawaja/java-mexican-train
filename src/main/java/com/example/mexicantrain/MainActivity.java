@@ -41,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button helpButton = (Button) findViewById(R.id.helpButton);
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("mytag","helpButton onclick created.");
+                humanHelp();
+            }
+        });
         boolean serializedStart = false;
         //gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
         //Load intent data
@@ -110,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void humanHelp() {
+        game.getBestHumanMove();
+        addGameFeedMessage(game.getHumanMoveExplanation());
+        game.clearHumanMoveExplanation();
+    }
+
     public void displayTrains() {
 
         LinearLayout allTrains = (LinearLayout) findViewById(R.id.allTrainsLayout);
@@ -132,6 +145,15 @@ public class MainActivity extends AppCompatActivity {
     public void displayHand() {
         //BURBUR check for valid move BEFORE user makes a move
         //BURBUR need to get humanTrainPlayable and other trains too
+
+        //UPDATE WHOSE TURN IT IS
+        TextView whoseTurn = (TextView) findViewById(R.id.whoseTurnLabel);
+        if (game.getHumanTurn()) {
+            whoseTurn.setText("Human Turn");
+        }
+        else {
+            whoseTurn.setText("Computer Turn");
+        }
         game.setPlayableTrainsHuman();
 
         //IF human is playing we have to check if they have a valid move before they play
@@ -331,7 +353,8 @@ public class MainActivity extends AppCompatActivity {
 
     void humanPlaysTile(Tile userTile, char userTrain) {
         int value = game.playTile( userTile, userTrain);
-
+        addGameFeedMessage(game.getHumanMoveExplanation());
+        game.clearHumanMoveExplanation();
         //BURBUR THIS SHOULD BE IN GAME CLASS
         if(value > 0) {
             game.addComputerScore(value);
@@ -372,9 +395,12 @@ public class MainActivity extends AppCompatActivity {
             //add to box click a tile and select a train to play
         }
         else if(!game.getHumanTurn()) {
-            this.game.playTile(new Tile(-1,-1), ' ');
+            int value = this.game.playTile(new Tile(-1,-1), ' ');
+            //burbur check here if computer won game by value being > 0.
             game.setHumanTurn();
             addGameFeedMessage(game.getComputerMoveExplanation());
+            game.clearComputerMoveExplanation();
+            game.clearHumanMoveExplanation();//BURBUR double check clearing here is where it should be cleared
             displayTrains();
             displayHand();
         }
@@ -382,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addGameFeedMessage(String s) {
         LinearLayout gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
-        gameFeed.removeAllViews();
+        //gameFeed.removeAllViews();if removing feed doesnt work then just copy what is in the feed.
         TextView tmpText = new TextView(this);
         tmpText.setText(s);
         gameFeed.addView(tmpText);
