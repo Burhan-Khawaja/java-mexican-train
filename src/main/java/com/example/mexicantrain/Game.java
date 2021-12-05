@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
 public class Game {
     private int roundNumber;
@@ -37,6 +41,9 @@ public class Game {
     }
     public Hand getHumanHand(){
         return round.getHumanHand();
+    }
+    public Hand getBoneyardHand() {
+        return round.getBoneyardHand();
     }
 
     public int playTile(Tile userTile, char userTrain) {
@@ -98,17 +105,15 @@ public class Game {
         round.setEngineInt(engineVal);
     }
 
-    public void loadGame(Scanner loadGameFile) {
+    public void loadGame(BufferedReader loadGameFile) throws IOException {
         boolean computerData = false;
         boolean humanData = false;
         boolean setMarker = false;
-
-        while(loadGameFile.hasNextLine()) {
+        String line;
+        while( (line = loadGameFile.readLine() ) != null) {
             //create words to track what we are tracking
             String firstWord;
             //get the entire line of the file
-            //firstWord = loadGameFile.next();
-            String line = loadGameFile.nextLine();
             String[] arrOfWords = line.split(" ");
             Log.d("loadGame", line);
             firstWord = arrOfWords[0];
@@ -299,6 +304,68 @@ public class Game {
 
     public void getBestHumanMove() {
         round.getBestHumanMove();
+    }
+    public String getTrainAsString(int whoseTrain) {
+        String trainAsString = "";
+        if(whoseTrain == 0) {
+            //computer train
+            trainAsString = round.getComputerTrainAsString();
+        }
+        else if (whoseTrain == 1) {
+            trainAsString = round.getHumanTrainAsString();
+        }
+        else if (whoseTrain == 2){
+            trainAsString = round.getMexicanTrainAsString();
+        }
+        return trainAsString;
+    }
+
+    public void saveGame(String saveFileName) {
+
+    }
+
+    public void saveGame(FileOutputStream saveFileName) {
+
+        try {
+            saveFileName.write("Round: ".getBytes(StandardCharsets.UTF_8));
+            int tmpRoundNumber = getRoundNumber();
+            saveFileName.write(Integer.toString(tmpRoundNumber).getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n\nComputer:\n   Score: ".getBytes(StandardCharsets.UTF_8));
+            int tmpComputerScore = getComputerScore();
+            saveFileName.write(Integer.toString(tmpComputerScore).getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n   Hand: ".getBytes(StandardCharsets.UTF_8));
+            saveFileName.write(getComputerHand().handAsString().getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n   Train: ".getBytes(StandardCharsets.UTF_8));
+            saveFileName.write(getTrainAsString(0).getBytes(StandardCharsets.UTF_8));
+
+            //========================HUMAN VALUE OUTPUT===================
+
+            saveFileName.write("\n\nHuman:\n   Score: ".getBytes(StandardCharsets.UTF_8));
+            int tmpHumanScore = getComputerScore();
+            saveFileName.write(Integer.toString(tmpComputerScore).getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n   Hand: ".getBytes(StandardCharsets.UTF_8));
+            saveFileName.write(getHumanHand().handAsString().getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n   Train: ".getBytes(StandardCharsets.UTF_8));
+            saveFileName.write(getTrainAsString(1).getBytes(StandardCharsets.UTF_8));
+            //========================Mexican Train output===================
+            saveFileName.write("\n\nMexican Train: ".getBytes(StandardCharsets.UTF_8));
+            saveFileName.write(getTrainAsString(2).getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n\nBoneyard: ".getBytes(StandardCharsets.UTF_8));
+            saveFileName.write(getBoneyardHand().handAsString().getBytes(StandardCharsets.UTF_8));
+            saveFileName.write("\n\nNext Player: ".getBytes(StandardCharsets.UTF_8));
+            if(getHumanTurn()) {
+                saveFileName.write("Human".getBytes(StandardCharsets.UTF_8));
+            }
+            else {
+                saveFileName.write("Computer".getBytes(StandardCharsets.UTF_8));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
 

@@ -426,4 +426,8 @@ public abstract class Player {
     public void clearMoveExplanation(){
         this.moveExplanation = "";
     }
+
+    public String getTrainAsString(){
+        return playerTrain.trainAsStringSerialization();
+    }
 }

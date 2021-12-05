@@ -75,4 +75,17 @@ public class Hand {
     public ArrayList<Tile> getHandArrayList() {
         return this.hand;
     }
+
+    public String handAsString() {
+        String handString = "";
+        for(int i = 0; i < hand.size(); i++) {
+            //cant use getTileAsString in tile class b/c It is formated as x - y, when serialization
+            //is x-y format.
+            handString += hand.get(i).getFirstNum();
+            handString += "-";
+            handString += hand.get(i).getSecondNum();
+            handString += " ";
+        }
+        return handString;
+    }
 }

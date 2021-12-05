@@ -446,6 +446,39 @@ public class Round {
         humanPlayer.setStringMoveExplanation(" The computer suggests: " + bestMove);
 
     }
+
+    public String getComputerTrainAsString() {
+        String trainAsString = "";
+        //check if train has marker. computer marker is added to start of computer train
+        if(computerPlayer.getTrainMarker()) {
+            trainAsString += "M ";
+        }
+        //add all the tiles to the train
+        trainAsString += computerPlayer.getTrainAsString();
+        //add engine tile to end of train
+        trainAsString += engineInt + "-" + engineInt;
+        return trainAsString;
+    }
+
+    public String getHumanTrainAsString() {
+        //add engine int first to human train
+        String trainAsString = engineInt + "-" + engineInt + " ";
+        //add all tiles to train for human
+        trainAsString += humanPlayer.getTrainAsString();
+        //if there is a marker it gets added last to train
+        if(humanPlayer.getTrainMarker()) {
+            trainAsString += "M";
+        }
+        return trainAsString;
+    }
+
+    public String getMexicanTrainAsString() {
+        return mexicanTrain.trainAsStringSerialization();
+    }
+
+    public Hand getBoneyardHand() {
+        return this.boneyard;
+    }
 }
 
 

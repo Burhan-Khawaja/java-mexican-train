@@ -31,6 +31,7 @@ public class welcomeScreen extends Activity {
 
         loadGame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 /**
                  * 1- get the text from the view the user filled out
                  * 2- convert that text to a String called fileName

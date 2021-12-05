@@ -127,4 +127,24 @@ public class Train {
     public void clearTrainMarker() {
         this.marker = false;
     }
+
+    public int getSize() {
+        return this.trainDeque.size();
+    }
+
+    public String trainAsStringSerialization() {
+        String train = new String();
+        Iterator<Tile> iterator = trainDeque.iterator();
+
+        while(iterator.hasNext()){
+            Tile tmpTile = iterator.next();
+
+            train += tmpTile.getFirstNum();
+            train += "-";
+            train += tmpTile.getSecondNum();
+            train += " ";
+        }
+        return train;
+
+    }
 }

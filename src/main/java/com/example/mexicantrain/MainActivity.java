@@ -8,13 +8,20 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import java.io.InputStream;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -48,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
                 humanHelp();
             }
         });
+
+        Button saveGame = (Button) findViewById(R.id.saveGameButton);
+        saveGame.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("mytag","save button onclick created.");
+                saveGamePopup();
+            }
+        });
         boolean serializedStart = false;
         //gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
         //Load intent data
@@ -72,13 +87,32 @@ public class MainActivity extends AppCompatActivity {
                 //int loadGameFileInt = getIntent().getIntExtra(INTENT_LOAD_GAME_NAME, -1);
                 serializedStart = true;
                 String fileName = getIntent().getStringExtra(INTENT_LOAD_GAME_NAME);
-                //InputStream fileInputStream = this.getBaseContext().getResources().openRawResource(R.raw.case1);
-                //int testfileId = this.getBaseContext().getResources().getIdentifier("case2","raw", this.getBaseContext().getPackageName());
 
-                int fileId = this.getBaseContext().getResources().getIdentifier(fileName, "raw", this.getBaseContext().getPackageName());
-                InputStream fileInputStream = getBaseContext().getResources().openRawResource(fileId);
-                Scanner loadGameScanner = new Scanner(fileInputStream);
-                game.loadGame(loadGameScanner);
+
+
+                File file = new File(getBaseContext().getFilesDir(),fileName);
+
+                //access the file and read context of it by using a fileInputStream
+                try {
+                    FileInputStream fis = getBaseContext().openFileInput(fileName);
+                    InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    BufferedReader fileReader = new BufferedReader(inputStreamReader);
+                    //String line = fileReader.readLine();
+                    game.loadGame(fileReader);
+
+                    //Log.d("myTag", line);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                //int fileId = this.getBaseContext().getResources().getIdentifier(fileName, "raw", this.getBaseContext().getPackageName());
+                //InputStream fileInputStream = getBaseContext().getResources().openRawResource(fileId);
+                //Scanner loadGameScanner = new Scanner(fileInputStream);
             }
         }
         //increment round number.
@@ -115,6 +149,45 @@ public class MainActivity extends AppCompatActivity {
         displayComputerHand();
         displayHand();
 
+    }
+
+    private void saveGamePopup() {
+        //create layoutInflator to create a popup menu to ask the user what they want the save game name to be.
+        LayoutInflater inflater = (LayoutInflater) this.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.save_game, null);
+        //create the popup window
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        //show popup window
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, true);
+        popupWindow.showAtLocation(this.findViewById(R.id.testCL), Gravity.CENTER, 0, 0);
+
+        //get button that user clicks to save in the popup.
+        Button saveAndQuitBtn = (Button) popupView.findViewById(R.id.Save);
+
+        //when the user clicks the button, get the value they entered and call the saveGame function and begin saving everything to that file.
+        if(saveAndQuitBtn != null ) {
+            saveAndQuitBtn.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //access textView that user entered the save namae in
+                    EditText rawSaveName = (EditText) popupView.findViewById(R.id.saveGameName);
+                    //convert it to a string
+                    String saveName = rawSaveName.getText().toString();
+
+                    FileOutputStream fileOutput = null;
+
+                    try {
+                        //create the fileOutputStream object with the string we recieved from above,
+                        //and call the game saveGame function.
+                        fileOutput = openFileOutput(saveName, MODE_PRIVATE);
+                        game.saveGame(fileOutput);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    //saveGame(saveName);
+                }
+            });
+        }
     }
 
     private void humanHelp() {
@@ -164,9 +237,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("myTag", "The tile you picked from the boneyard is not playable, skipping turn.");
                 //kickoff computer turn here.
                 // PLAYCOMPUTERTURN
-                //this.game.playTile(new Tile(-1,-1), ' ');
-                //text.setText("Error: You have no move, and picked a tile from the boneyard");
-                //gameFeed.addView(text, gameFeed.getChildCount() - 1);
                 //set computer turn to true?
             }
         }
@@ -187,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
             TextView element = new TextView(this);
             element.setText(playerHand.getTile(i).tileAsString());
             element.setPadding(5,5,5,5);
+            //element.setBackgroundResource(R.drawable.testd);
             Log.d("mytag","attempting to create event handler");
             element.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -413,4 +484,29 @@ public class MainActivity extends AppCompatActivity {
         tmpText.setText(s);
         gameFeed.addView(tmpText);
     }
+/*
+    public void saveGame(String saveFileName) {
+        FileOutputStream fileOutput = null;
+        try {
+            fileOutput = openFileOutput(saveFileName, MODE_PRIVATE);
+            fileOutput.write("Round: ".getBytes(StandardCharsets.UTF_8));
+            int tmpRoundNumber = game.getRoundNumber();
+            fileOutput.write(Integer.toString(tmpRoundNumber).getBytes(StandardCharsets.UTF_8));
+            fileOutput.write("\n\nComputer:\n\tScore: ".getBytes(StandardCharsets.UTF_8));
+            int tmpComputerScore = game.getComputerScore();
+            fileOutput.write(Integer.toString(tmpComputerScore).getBytes(StandardCharsets.UTF_8));
+            fileOutput.write("\n\tHand: ".getBytes(StandardCharsets.UTF_8));
+            fileOutput.write(game.getComputerHand().handAsString().getBytes(StandardCharsets.UTF_8));
+            fileOutput.write("\n\tTrain: ".getBytes(StandardCharsets.UTF_8));
+            fileOutput.write(game.getTrainAsString(0).getBytes(StandardCharsets.UTF_8));
+            fileOutput.write("\n\nHuman:\n\tScore: ".getBytes(StandardCharsets.UTF_8));
+            fileOutput.write(game.getHumanScore())
+            //fileOutput.write(game.getComputerHand().toString().getBytes(StandardCharsets.UTF_8));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }*/
 }
