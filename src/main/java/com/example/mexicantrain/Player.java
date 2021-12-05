@@ -116,7 +116,9 @@ public abstract class Player {
         if(boneyard.getSize() == 0) {
             //BURBUR add error message that boneyard is empty and a marker is placed on the train
             //this.settrain
-            Log.d("myTag", "ERROR: BONEYARD IS EMPTY AND YOU HAVE NO MOVES. A MARKER IS PLACED ON YOUR TRAIN");
+            setStringMoveExplanation("Boneyard is empty, so a marker has been placed on the train.");
+            this.setTrainMarker();
+            return false;
         }
         else {
             //get top tile of boneyard.
@@ -130,6 +132,8 @@ public abstract class Player {
             boolean validMove  = this.existsValidMove(humanPlayer,computerPlayer,mexicanTrain);
             if(!validMove) {
                 //user does not have a valid move. place marker, return false.
+                setStringMoveExplanation(" There is no valid move after taking the tile " + boneyardTile.tileAsString() + " ");
+                setStringMoveExplanation("from the boneyard.\n A marker has been placed on your train");
                 Log.d("myTag", "USER HAS NO VALID MOVE AFTER TAKING TILE FROM BONEYARD");
                 //BURBUR set train marker here
                 return false;
@@ -137,36 +141,36 @@ public abstract class Player {
             }
             else {
                 //the tile selected is playable.
+                setStringMoveExplanation("The tile " +boneyardTile.tileAsString() + " drawn from the boneyard is playable. ");
                 return true;
             }
-
         }
-        return false;
     }
 
     boolean checkOrphanDoubles(Player humanPlayer, Player computerPlayer, Train mexicanTrain)
     {
         boolean orphanDouble = false;
         //1- check if there exists any orphan double on a train
-        if (humanPlayer.playerTrain.getOrphanDouble() == true || computerPlayer.playerTrain.getOrphanDouble() == true || mexicanTrain.getOrphanDouble() == true) {
+        if (humanPlayer.playerTrain.getOrphanDouble() || computerPlayer.playerTrain.getOrphanDouble() || mexicanTrain.getOrphanDouble()) {
             //make all trains unplayable. later we will check which trains have orphan doubles and set them as the only trains playable
             this.humanTrainPlayable = false;
             this.computerTrainPlayable = false;
             this.mexicanTrainPlayable = false;
         }
         //check if each train has an orphan double. if it does, make that train playable, and set orphanDouble to true.
-        if (humanPlayer.playerTrain.getOrphanDouble() == true) {
+        if (humanPlayer.playerTrain.getOrphanDouble()) {
+            setStringMoveExplanation("There is an orphan double on the human train");
             //BURBUR output that theres an orphandouble on humantrain
             this.humanTrainPlayable = true;
             orphanDouble = true;
         }
-        if (computerPlayer.playerTrain.getOrphanDouble() == true) {
-            //BURBUR output that theres an orphandouble on
+        if (computerPlayer.playerTrain.getOrphanDouble()) {
+            setStringMoveExplanation("There is an orphan double on the computer train");
             this.computerTrainPlayable = true;
             orphanDouble = true;
         }
-        if (mexicanTrain.getOrphanDouble() == true) {
-            //BURBUR output that theres an orphandouble on
+        if (mexicanTrain.getOrphanDouble()) {
+            setStringMoveExplanation("There is an orphan double on the mexican train");
             this.mexicanTrainPlayable = true;
             orphanDouble = true;
         }
@@ -359,10 +363,10 @@ public abstract class Player {
             if (bestTiles.get(i).isDouble()) {
                 explanation += bestTiles.get(i).tileAsString();
                 explanation += " was played on the ";
-                if (trains.get(i) == "m") {
+                if (trains.get(i).equals("m")) {
                     explanation += "mexican";
                 }
-                else if (trains.get(i) == "c") {
+                else if (trains.get(i).equals("c")) {
                     explanation += "computer";
                 }
                 else {

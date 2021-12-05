@@ -24,6 +24,7 @@ public class Round {
     private boolean computerWon;
     private boolean humanWon;
 
+
     //test value.
     private boolean humanHasMove;
 
@@ -316,12 +317,12 @@ public class Round {
                 computerTurn = true;
                 humanTurn = false;
                 //tile drawn is not playable, place marker and skip turn
-                //BURBUR NEED TO ADD MARKER TO TRAIN.
-                //bottomText.setText("The tile you picked from the boneyard is not playable.");
+                this.humanPlayer.setTrainMarker();
+                this.humanPlayer.setStringMoveExplanation("The tile drawn is not playable, a marker has been placed on your train");
                 return false;
             }
             else { //tile picked is playable. play it.
-                //bottomText.setText("The tile you picked from the boneyard is playable. Restarting turn.");
+                this.humanPlayer.setStringMoveExplanation("The tile you picked from the boneyard is playable. Restarting turn.");
                 return true;
             }
         }
@@ -439,6 +440,12 @@ public class Round {
     }
 
     public void getBestHumanMove() {
+        //before we figure out what moves are playable, we have to set the train we can play on
+        if(!humanPlayer.checkOrphanDoubles(humanPlayer, computerPlayer, mexicanTrain)) {
+            humanPlayer.computerTrainPlayable = computerPlayer.getTrainMarker();
+            humanPlayer.humanTrainPlayable = true;
+            humanPlayer.mexicanTrainPlayable = true;
+        }
         ArrayList<Tile> bestTiles = new ArrayList<Tile>();
         ArrayList<String> bestTrains = new ArrayList<String>();
         humanPlayer.findBestMove(humanPlayer,computerPlayer,mexicanTrain, boneyard, bestTiles, bestTrains);
@@ -478,6 +485,15 @@ public class Round {
 
     public Hand getBoneyardHand() {
         return this.boneyard;
+    }
+
+
+    public int getHumanPips() {
+        return humanPlayer.sumOfPips();
+    }
+
+    public int getComputerPips() {
+        return computerPlayer.sumOfPips();
     }
 }
 

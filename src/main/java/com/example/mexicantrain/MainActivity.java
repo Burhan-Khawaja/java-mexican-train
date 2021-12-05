@@ -235,9 +235,10 @@ public class MainActivity extends AppCompatActivity {
             if (doesHumanHaveMove == false) {
                 TextView text = new TextView(this);
                 Log.d("myTag", "The tile you picked from the boneyard is not playable, skipping turn.");
-                //kickoff computer turn here.
-                // PLAYCOMPUTERTURN
-                //set computer turn to true?
+                if(game.getBoneyardHand().getSize() ==0 ) {
+                    game.setSkippedHumanTurn(true);
+                }
+
             }
         }
 
@@ -424,6 +425,10 @@ public class MainActivity extends AppCompatActivity {
 
     void humanPlaysTile(Tile userTile, char userTrain) {
         int value = game.playTile( userTile, userTrain);
+
+        //If value returned is -666, then boneyard is empty and human turn is skipped.
+        game.setSkippedHumanTurn(value == -666);
+        game.checkHungGame();
         addGameFeedMessage(game.getHumanMoveExplanation());
         game.clearHumanMoveExplanation();
         //BURBUR THIS SHOULD BE IN GAME CLASS
@@ -456,6 +461,9 @@ public class MainActivity extends AppCompatActivity {
         if(value == -123) {
             //human played a double, and is playing another tile.
         }
+        if(value == -666) {
+            //human player
+        }
         displayTrains();
         displayHand();
     }
@@ -467,6 +475,12 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(!game.getHumanTurn()) {
             int value = this.game.playTile(new Tile(-1,-1), ' ');
+            //set computerSkippedTurn boolean true if value is -666,meaning that
+            //the boneyard wsa empty and computer had no playable tile.
+            game.setSkippedComputerTurn(value == -666);
+
+            game.checkHungGame();
+
             //burbur check here if computer won game by value being > 0.
             game.setHumanTurn();
             addGameFeedMessage(game.getComputerMoveExplanation());
@@ -484,29 +498,5 @@ public class MainActivity extends AppCompatActivity {
         tmpText.setText(s);
         gameFeed.addView(tmpText);
     }
-/*
-    public void saveGame(String saveFileName) {
-        FileOutputStream fileOutput = null;
-        try {
-            fileOutput = openFileOutput(saveFileName, MODE_PRIVATE);
-            fileOutput.write("Round: ".getBytes(StandardCharsets.UTF_8));
-            int tmpRoundNumber = game.getRoundNumber();
-            fileOutput.write(Integer.toString(tmpRoundNumber).getBytes(StandardCharsets.UTF_8));
-            fileOutput.write("\n\nComputer:\n\tScore: ".getBytes(StandardCharsets.UTF_8));
-            int tmpComputerScore = game.getComputerScore();
-            fileOutput.write(Integer.toString(tmpComputerScore).getBytes(StandardCharsets.UTF_8));
-            fileOutput.write("\n\tHand: ".getBytes(StandardCharsets.UTF_8));
-            fileOutput.write(game.getComputerHand().handAsString().getBytes(StandardCharsets.UTF_8));
-            fileOutput.write("\n\tTrain: ".getBytes(StandardCharsets.UTF_8));
-            fileOutput.write(game.getTrainAsString(0).getBytes(StandardCharsets.UTF_8));
-            fileOutput.write("\n\nHuman:\n\tScore: ".getBytes(StandardCharsets.UTF_8));
-            fileOutput.write(game.getHumanScore())
-            //fileOutput.write(game.getComputerHand().toString().getBytes(StandardCharsets.UTF_8));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }*/
 }
