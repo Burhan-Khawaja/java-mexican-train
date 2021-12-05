@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".HungGame"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

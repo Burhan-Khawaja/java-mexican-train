@@ -36,18 +36,17 @@ public class Human extends Player {
         boolean validMoveSelected = false;
 
         //set playable trains
-        if(checkOrphanDoubles(humanPlayer,computerPlayer,mexicanTrain) == false) {
+        if(!checkOrphanDoubles(humanPlayer, computerPlayer, mexicanTrain)) {
             this.computerTrainPlayable = computerPlayer.getTrainMarker();
             this.humanTrainPlayable = true;
             this.mexicanTrainPlayable = true;
         }
 
-        boolean playerHasValidMove = existsValidMove(humanPlayer,computerPlayer,mexicanTrain);
+        //boolean playerHasValidMove = existsValidMove(humanPlayer,computerPlayer,mexicanTrain);
         //BURBURBURBUR PLAYERHASVALIDMOVE NOTHINGIS DONE WITH IT SO WE GO IN ENDLESS LOOP.
         //check that user can play on selected train
         boolean validTrainSelected = checkUserTrainPlayable(trainToPlay);
         if(validTrainSelected == false ) {
-            Log.d("myTag", "ERROR: Invalid train choice selected.");
             setStringMoveExplanation("ERROR: Invalid train choice selected. Select a different tile and train ");
             return -22;
         }
@@ -57,7 +56,9 @@ public class Human extends Player {
             Log.d("myTag", "User playing on human train.");
             humanPlayer.playerTrain.addTileBack(tileToPlay);
             setStringMoveExplanation("You played " + tileToPlay.tileAsString() + " on the human train" );
-
+            if(this.getTrainMarker()) {
+                this.clearTrainMarker();
+            }
             validMoveSelected = true;
         }
         else if(trainToPlay == 'c' && tileFitsOnTrain(tileToPlay, computerPlayer.getTrainEndNumber())) {

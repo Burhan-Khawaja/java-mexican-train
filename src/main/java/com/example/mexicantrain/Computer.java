@@ -23,13 +23,23 @@ public class Computer extends Player{
             this.humanTrainPlayable = humanPlayer.getTrainMarker();
             this.mexicanTrainPlayable = true;
         }
-
-        boolean computerHasValidMove = existsValidMove(humanPlayer,computerPlayer,mexicanTrain);
+        //check for valid move
+        boolean computerHasValidMove = existsValidMove(humanPlayer, computerPlayer, mexicanTrain);
         if(!computerHasValidMove) {
-            Log.d("myTag", "Computer has no valid move. Adding marker to train and skipping turn");
-            computerPlayer.setTrainMarker();
-            return 0;
+            setStringMoveExplanation("Computer has no valid move. ");
+            boolean skipTurn = noPlayableTiles(humanPlayer,computerPlayer,mexicanTrain,boneyard);
+            if(skipTurn == false) {
+                //drawn tile is not playable, skip turn after a marker is placed on train.
+                this.setTrainMarker();
+                if(boneyard.getSize() == 0) {
+                    //if boneyard is empty, and have to skip turn return -666 since thats our error code for this scenario
+                    return -666;
+                }
+                return 0;
+            }
         }
+
+        //find best move for computer
         findBestMove(humanPlayer,computerPlayer,mexicanTrain, boneyard,bestTilesToPlay,trainsToPlayOn);
         String cpuMoveExplanation = interpretBestMove(bestTilesToPlay, trainsToPlayOn);
         this.setStringMoveExplanation(cpuMoveExplanation);
@@ -66,6 +76,41 @@ public class Computer extends Player{
                 }
             }
         }
+
+
+
+        //user played 2 tiles, so theres a chance that there is 1 orphan double.
+        if (trainsToPlayOn.size() >= 2) {
+            if (!trainsToPlayOn.get(0).equals(trainsToPlayOn.get(1))) {
+                //train user played on arent equal to each other, so make the first train an orphan double
+                if (trainsToPlayOn.get(0).equals("m")) {
+                    mexicanTrain.setOrphanDouble(true);
+                }
+                else if (trainsToPlayOn.get(0).equals("c")) {
+                    computerPlayer.setOrphanDouble(true);
+                }
+                else {
+                    humanPlayer.setOrphanDouble(true);
+                }
+            }
+        }
+        //user played 3 tiles, so we check if the second tile they played is also an orphan double.
+        if (trainsToPlayOn.size() == 3) {
+            if (!trainsToPlayOn.get(1).equals(trainsToPlayOn.get(2))) {
+                //train user played on arent equal to each other, so make the first train an orphan double
+                if (trainsToPlayOn.get(1).equals("m")) {
+                    mexicanTrain.setOrphanDouble(true);
+                }
+                else if (trainsToPlayOn.get(1).equals("c")) {
+                    computerPlayer.setOrphanDouble(true);
+                }
+                else {
+                    humanPlayer.setOrphanDouble(true);
+                }
+            }
+
+        }
+
         Log.d("myTag", "computer turn finished.");
         return 0;
     }

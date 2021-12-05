@@ -19,6 +19,9 @@ public class Game {
     private Round round ;
     private Activity activity;
 
+    private boolean skippedHumanTurn;
+    private boolean skippedComputerTurn;
+
     Game(Activity activity) {
         this.roundNumber = 0;
         this.humanScore = 0;
@@ -320,9 +323,7 @@ public class Game {
         return trainAsString;
     }
 
-    public void saveGame(String saveFileName) {
 
-    }
 
     public void saveGame(FileOutputStream saveFileName) {
 
@@ -350,6 +351,7 @@ public class Game {
             //========================Mexican Train output===================
             saveFileName.write("\n\nMexican Train: ".getBytes(StandardCharsets.UTF_8));
             saveFileName.write(getTrainAsString(2).getBytes(StandardCharsets.UTF_8));
+            //========================Output Boneyard to file.================
             saveFileName.write("\n\nBoneyard: ".getBytes(StandardCharsets.UTF_8));
             saveFileName.write(getBoneyardHand().handAsString().getBytes(StandardCharsets.UTF_8));
             saveFileName.write("\n\nNext Player: ".getBytes(StandardCharsets.UTF_8));
@@ -366,6 +368,38 @@ public class Game {
         }
 
 
+    }
+
+    public boolean isSkippedHumanTurn() {
+        return skippedHumanTurn;
+    }
+
+    public void setSkippedHumanTurn(boolean skippedHumanTurn) {
+        this.skippedHumanTurn = skippedHumanTurn;
+    }
+
+    public boolean isSkippedComputerTurn() {
+        return skippedComputerTurn;
+    }
+
+    public void setSkippedComputerTurn(boolean skippedComputerTurn) {
+        this.skippedComputerTurn = skippedComputerTurn;
+    }
+
+    public void checkHungGame() {
+        if(isSkippedHumanTurn() && isSkippedComputerTurn()) {
+            Log.d("myTag", "Game over skipped.");
+            computerScore += round.getComputerPips();
+            humanScore += round.getHumanPips();
+
+            //create intent and load it with relevant data.
+            Intent endRoundIntent = new Intent(this.activity, HungGame.class);
+            endRoundIntent.putExtra("gameRoundNum", getRoundNumber() );
+            endRoundIntent.putExtra("gameHumanScore", getHumanScore());
+            endRoundIntent.putExtra("gameComputerScore", getComputerScore());
+            endRoundIntent.putExtra("roundEngineInt", round.getEngineValue());
+            this.activity.startActivity(endRoundIntent);
+        }
     }
 }
 
