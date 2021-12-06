@@ -141,7 +141,7 @@ public class Round {
         //if false, then get marker on cpu train and set human to playable
         if(humanPlayer.checkOrphanDoubles(humanPlayer,computerPlayer,mexicanTrain) == false) {
             humanPlayer.humanTrainPlayable = true;
-            humanPlayer.computerTrainPlayable= humanPlayer.getTrainMarker();
+            humanPlayer.computerTrainPlayable= computerPlayer.getTrainMarker();
             humanPlayer.mexicanTrainPlayable = true;
         }
     }
@@ -241,22 +241,28 @@ public class Round {
 
 
     public int startRound(boolean serializedStart, int humanScore, int computerScore, int roundNumber) {
-
-
         if(!serializedStart) {
             this.roundNumber = 0;
             dealTiles();
-            //BURBUR REMOVE ENGINE TILE
             this.engineInt = getNextEngineValue();
+            //remove the engine tile, wherever it is
+            //if its not in a certain hand,then nothing happens so its fine if we remove it from
+            //all hands
+            boneyard.removeTile(engineInt,engineInt);
+            humanPlayer.playerHand.removeTile(engineInt,engineInt);
+            computerPlayer.playerHand.removeTile(engineInt,engineInt);
             setTrainEndNumbers();
-            //humanPlayer.addTileToHand(new Tile(9,9));
             //BURBUR who goes first
             humanTurn = true;
+        }
+        if(humanScore == computerScore) {
+            //coinflip goes here.
         }
         this.roundNumber = roundNumber;
         this.humanScore = humanScore;
         this.computerScore = computerScore;
-        //int pipsValue = startTurns(humanPlayer,humanPlayer,mexicanTrain,boneyard, new Tile(-1,-1), ' ');
+
+
         return 0;
     }
 

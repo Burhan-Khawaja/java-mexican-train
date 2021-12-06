@@ -32,8 +32,8 @@ public class Game {
 
 
     public void playGame(boolean serializedStart) {
-        //BURBUR serialized start -- need to include that
         round.startRound(serializedStart,humanScore,computerScore,roundNumber);
+
     }
 
     public String getHumanAndComputerTrain() {

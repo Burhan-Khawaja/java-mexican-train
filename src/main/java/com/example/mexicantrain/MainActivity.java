@@ -1,6 +1,7 @@
 package com.example.mexicantrain;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -63,8 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 saveGamePopup();
             }
         });
+
         boolean serializedStart = false;
-        //gameFeed = (LinearLayout) findViewById(R.id.gameInstructionLL);
+
         //Load intent data
         if(getIntent() != null) {
             Log.d("myTag", "Get Intent is not null");
@@ -88,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 serializedStart = true;
                 String fileName = getIntent().getStringExtra(INTENT_LOAD_GAME_NAME);
 
-
-
                 File file = new File(getBaseContext().getFilesDir(),fileName);
 
                 //access the file and read context of it by using a fileInputStream
@@ -100,19 +100,11 @@ public class MainActivity extends AppCompatActivity {
                     BufferedReader fileReader = new BufferedReader(inputStreamReader);
                     //String line = fileReader.readLine();
                     game.loadGame(fileReader);
-
-                    //Log.d("myTag", line);
-
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-                //int fileId = this.getBaseContext().getResources().getIdentifier(fileName, "raw", this.getBaseContext().getPackageName());
-                //InputStream fileInputStream = getBaseContext().getResources().openRawResource(fileId);
-                //Scanner loadGameScanner = new Scanner(fileInputStream);
             }
         }
         //increment round number.
@@ -129,22 +121,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         game.playGame(serializedStart);
-        //remove all tiles from players hand
-        /*
-        while( game.getHumanHand().getSize() > 0) {
-            int i = 0;
-            game.getHumanHand().removeTile(game.getHumanHand().getTile(i).getFirstNum(),game.getHumanHand().getTile(i).getSecondNum());
-        }
 
-        //BURBUR TESTING CODE
-        //game.getHumanHand().addTile(new Tile(1,1));
-        //game.getHumanHand().addTile(new Tile(1,8));
-        game.getHumanHand().addTile(new Tile(9,8));
-        game.getHumanHand().addTile(new Tile(9,9));
-        game.getHumanHand().addTile(new Tile(9,9));
-        game.getHumanHand().addTile(new Tile(9,9));
-        game.getHumanHand().addTile(new Tile(9,9));
-*/
+        //check who goes first
+        if(game.getHumanScore() == game.getComputerScore()) {
+            Intent coinFlip = new Intent(this, CoinFlip.class);
+            //0 is request code and represents MainActivity
+            startActivityForResult(coinFlip, 0);
+        }
         displayTrains();
         displayComputerHand();
         displayHand();
@@ -216,19 +199,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayHand() {
-        //BURBUR check for valid move BEFORE user makes a move
-        //BURBUR need to get humanTrainPlayable and other trains too
-
-        //UPDATE WHOSE TURN IT IS
-        TextView whoseTurn = (TextView) findViewById(R.id.whoseTurnLabel);
-        if (game.getHumanTurn()) {
-            whoseTurn.setText("Human Turn");
-        }
-        else {
-            whoseTurn.setText("Computer Turn");
-        }
+        //set humans playable trains so we can check if they have a valid move
         game.setPlayableTrainsHuman();
-
         //IF human is playing we have to check if they have a valid move before they play
         if(game.getHumanTurn()) {
             boolean doesHumanHaveMove = game.humanHasValidMove();
@@ -240,6 +212,15 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+        }
+
+        //UPDATE WHOSE TURN IT IS
+        TextView whoseTurn = (TextView) findViewById(R.id.whoseTurnLabel);
+        if (game.getHumanTurn()) {
+            whoseTurn.setText("Human Turn");
+        }
+        else {
+            whoseTurn.setText("Computer Turn");
         }
 
         Hand playerHand = game.getHumanHand();
@@ -478,7 +459,11 @@ public class MainActivity extends AppCompatActivity {
             //set computerSkippedTurn boolean true if value is -666,meaning that
             //the boneyard wsa empty and computer had no playable tile.
             game.setSkippedComputerTurn(value == -666);
-
+            if(value > 0 ){
+                //computer won game!
+                game.addHumanScore(value);
+                game.playAgain();
+            }
             game.checkHungGame();
 
             //burbur check here if computer won game by value being > 0.

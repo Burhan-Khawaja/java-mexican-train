@@ -19,7 +19,7 @@ public class Hand {
      * Get the size of the hand
      * @return int, which represents number of tiles in the ArrayList
      */
-    public int getSize() {
+    public final int getSize() {
         return this.hand.size();
     }
 

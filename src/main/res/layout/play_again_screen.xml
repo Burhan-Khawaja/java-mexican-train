@@ -7,14 +7,14 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="268dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="279dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="56dp"
         android:text="Would you like to play another round?"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.475"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/currentComputerScore" />
 
     <Button
         android:id="@+id/playAnotherRoundBTN"
@@ -36,4 +36,28 @@
         app:layout_constraintHorizontal_bias="0.587"
         app:layout_constraintStart_toEndOf="@+id/playAnotherRoundBTN"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/currentHumanScore"
+        android:layout_width="74dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="160dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toStartOf="@+id/currentComputerScore"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/currentComputerScore"
+        android:layout_width="71dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

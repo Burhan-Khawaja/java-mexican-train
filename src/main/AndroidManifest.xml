@@ -11,6 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".CoinFlip"
+            android:exported="false" />
+        <activity
+            android:name=".OutputWinner"
+            android:exported="false" />
+        <activity
             android:name=".HungGame"
             android:exported="false"/>
         <activity
