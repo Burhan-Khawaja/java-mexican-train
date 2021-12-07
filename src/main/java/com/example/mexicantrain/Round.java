@@ -501,6 +501,58 @@ public class Round {
     public int getComputerPips() {
         return computerPlayer.sumOfPips();
     }
+
+    public void setHumanPlayerOrphanDoubles() {
+        ArrayList<String> humanTrainsPlayed = this.humanPlayer.getTrainsPlayed();
+
+        //user played 2 tiles, so theres a chance that there is 1 orphan double.
+        if (humanTrainsPlayed.size() >= 2) {
+            if (!humanTrainsPlayed.get(0).equals(humanTrainsPlayed.get(1))) {
+                //train user played on arent equal to each other, so make the first train an orphan double
+                if (humanTrainsPlayed.get(0).equals("m")) {
+                    mexicanTrain.setOrphanDouble(true);
+                }
+                else if (humanTrainsPlayed.get(0).equals( "c")) {
+                    computerPlayer.setOrphanDouble(true);
+                }
+                else {
+                    humanPlayer.setOrphanDouble(true);
+                }
+            }
+        }
+
+        //user played 3 tiles, so we check if the second tile they played is also an orphan double.
+        if (humanTrainsPlayed.size() == 3) {
+            if (!humanTrainsPlayed.get(1).equals(humanTrainsPlayed.get(2))) {
+                //train user played on arent equal to each other, so make the first train an orphan double
+                if (humanTrainsPlayed.get(1).equals( "m")) {
+                    mexicanTrain.setOrphanDouble(true);
+                }
+                else if (humanTrainsPlayed.get(1).equals( "c")) {
+                    computerPlayer.setOrphanDouble(true);
+                }
+                else {
+                    humanPlayer.setOrphanDouble(true);
+                }
+            }
+
+        }
+        humanPlayer.clearTrainsPlayed();
+    }
+
+    public void resetValues() {
+        humanPlayer.clearTrainsPlayed();
+        humanPlayer.clearMoveExplanation();
+        humanPlayer.clearTrainMarker();
+        humanPlayer.clearOrphanDouble();
+
+        computerPlayer.clearMoveExplanation();
+        computerPlayer.clearTrainMarker();
+        computerPlayer.clearOrphanDouble();
+
+        mexicanTrain.clearTrainMarker();
+        mexicanTrain.setOrphanDouble(false);
+    }
 }
 
 

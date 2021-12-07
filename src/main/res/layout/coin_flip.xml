@@ -2,19 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coinFlipLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="281dp"
-        android:layout_height="74dp"
-        android:layout_marginTop="36dp"
-        android:gravity="center|fill_horizontal"
-        android:text="Select Heads or Tails to determine who goes first"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/headsBtn"
@@ -48,4 +38,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/coin_heads" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="281dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center|fill_horizontal"
+        android:text="Select Heads or Tails to determine who goes first"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/coinTossOutput"
+        android:layout_width="213dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coinPicture"
+        app:layout_constraintVertical_bias="0.627" />
 </androidx.constraintlayout.widget.ConstraintLayout>

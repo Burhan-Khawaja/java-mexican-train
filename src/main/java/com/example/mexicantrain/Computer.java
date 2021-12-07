@@ -45,7 +45,7 @@ public class Computer extends Player{
         this.setStringMoveExplanation(cpuMoveExplanation);
         if(!bestTilesToPlay.isEmpty()) {
             for(int i = 0; i < bestTilesToPlay.size(); i++) {
-                if( trainsToPlayOn.get(i) == "c") {
+                if(trainsToPlayOn.get(i).equals("c")) {
                     computerPlayer.addTileFront(bestTilesToPlay.get(i));
                     //check the computer train for a marker, and clear it if there is one
                     if (computerPlayer.getTrainMarker()) {
@@ -56,7 +56,7 @@ public class Computer extends Player{
                         computerPlayer.setOrphanDouble(false);
                     }
                 }
-                else if( trainsToPlayOn.get(i) == "h") {
+                else if(trainsToPlayOn.get(i).equals("h")) {
                     humanPlayer.addTileBack(bestTilesToPlay.get(i));
                     //add the tile to the human train, and check for an orphan double.
                     if (humanPlayer.getOrphanDouble()) {

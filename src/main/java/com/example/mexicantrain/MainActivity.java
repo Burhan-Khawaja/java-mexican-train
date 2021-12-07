@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         //Load intent data
         if(getIntent() != null) {
             Log.d("myTag", "Get Intent is not null");
+            //starting a new round, with human/computer/round number/engine passed in so we have it
             if(getIntent().hasExtra(INTENT_COMPUTER_SCORE) ) {
                 game.addComputerScore( getIntent().getIntExtra(INTENT_COMPUTER_SCORE, -1));
             }
@@ -82,7 +83,8 @@ public class MainActivity extends AppCompatActivity {
             if(getIntent().hasExtra(INTENT_ROUND_ENGINEINT)) {
                 game.setEngineInt(getIntent().getIntExtra(INTENT_ROUND_ENGINEINT, -1));
             }
-
+            //clear all markers and orphan doubles
+            game.resetValues();
             //load game. open the file in mainActivity and pass it to game class
             // so it can manipulate the data/file as needed.
             if(getIntent().hasExtra(INTENT_LOAD_GAME_NAME)) {
@@ -123,16 +125,41 @@ public class MainActivity extends AppCompatActivity {
         game.playGame(serializedStart);
 
         //check who goes first
-        if(game.getHumanScore() == game.getComputerScore()) {
+        if(game.getHumanScore() == game.getComputerScore() && !serializedStart) {
             Intent coinFlip = new Intent(this, CoinFlip.class);
             //0 is request code and represents MainActivity
             startActivityForResult(coinFlip, 0);
+        }
+        else if(game.getHumanScore() > game.getComputerScore() && !serializedStart ){
+            game.setComputerTurn();
+        }
+        else if (game.getHumanScore() < game.getComputerScore() && !serializedStart) {
+            game.setHumanTurn();
         }
         displayTrains();
         displayComputerHand();
         displayHand();
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 0 && resultCode == RESULT_OK) {
+            int humanTurnResult = data.getIntExtra("humanTurn", -1);
+            if(humanTurnResult == 1) {
+                game.setHumanTurn();
+            }
+            else {
+                game.setComputerTurn();
+            }
+        }
+        displayHand();
+        displayTrains();
+        displayComputerHand();
+    } //onActivityResult
+
 
     private void saveGamePopup() {
         //create layoutInflator to create a popup menu to ask the user what they want the save game name to be.
@@ -423,6 +450,8 @@ public class MainActivity extends AppCompatActivity {
             game.playAgain();
         }
         if (value == 0) {
+            //check if user created any orphan doubles
+            game.setHumanPlayerOrphanDoubles();
             game.setComputerTurn();
             //human turn over, computer turn now.
             //COMPUTER TURN STARTS HERE. INSTEAD OF THIS, MAKE AN ONCLICK FUNCTION
@@ -431,6 +460,7 @@ public class MainActivity extends AppCompatActivity {
 
             //game.playTile(new Tile(-1, -1), ' ');
         }
+        //BURBUR DELETE ALL OF THESE?
         if(value == -1) {
             //train does not fit on tile
         }

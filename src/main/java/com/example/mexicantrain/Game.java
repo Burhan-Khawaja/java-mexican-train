@@ -18,7 +18,6 @@ public class Game {
     private int computerScore;
     private Round round ;
     private Activity activity;
-
     private boolean skippedHumanTurn;
     private boolean skippedComputerTurn;
 
@@ -400,6 +399,17 @@ public class Game {
             endRoundIntent.putExtra("roundEngineInt", round.getEngineValue());
             this.activity.startActivity(endRoundIntent);
         }
+    }
+
+    /**
+     * Set any orphan doubles created by the human player during their move.
+     */
+    public void setHumanPlayerOrphanDoubles() {
+        round.setHumanPlayerOrphanDoubles();
+    }
+
+    public void resetValues() {
+        round.resetValues();
     }
 }
 

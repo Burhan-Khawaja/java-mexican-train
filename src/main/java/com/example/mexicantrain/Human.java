@@ -4,17 +4,27 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.TextView;
 
-public class Human extends Player {
+import java.util.ArrayList;
 
+public class Human extends Player {
+    //used to track what trains the humans plays on so we can check for orphan doubles.
+    private ArrayList<String> currentTrainsPlayed;
     Human(Activity activity) {
         this.activity = activity;
+        currentTrainsPlayed = new ArrayList<String>();
     }
 
     public Train getTrain() {
         return this.playerTrain;
     }
 
+    public ArrayList<String> getTrainsPlayed() {
+        return this.currentTrainsPlayed;
+    }
 
+    public void clearTrainsPlayed() {
+        this.currentTrainsPlayed.clear();
+    }
     //check if tile fits on train and see if its a double
     private void userPlayedTile(TextView tilePlayed, char trainPlayedOn) {
         String tileAsString = tilePlayed.getText().toString();
@@ -59,11 +69,17 @@ public class Human extends Player {
             if(this.getTrainMarker()) {
                 this.clearTrainMarker();
             }
+            if(this.getOrphanDouble()) {
+                this.setOrphanDouble(false);
+            }
             validMoveSelected = true;
         }
         else if(trainToPlay == 'c' && tileFitsOnTrain(tileToPlay, computerPlayer.getTrainEndNumber())) {
             Log.d("myTag", "User playing on COMPUTER train.");
             computerPlayer.playerTrain.addTileFront(tileToPlay);
+            if(computerPlayer.getOrphanDouble()) {
+                computerPlayer.setOrphanDouble(false);
+            }
             setStringMoveExplanation("You played " + tileToPlay.tileAsString() + " on the computer train" );
 
             validMoveSelected = true;
@@ -71,6 +87,9 @@ public class Human extends Player {
         else if(trainToPlay == 'm' && tileFitsOnTrain(tileToPlay,mexicanTrain.getTrainEndNumber())) {
             mexicanTrain.addTileBack(tileToPlay);
             Log.d("myTag", "User playing on MEXICAN train.");
+            if(mexicanTrain.getOrphanDouble()) {
+                mexicanTrain.setOrphanDouble(false);
+            }
             setStringMoveExplanation("You played " + tileToPlay.tileAsString() + " on the mexican train" );
 
             validMoveSelected = true;
@@ -80,6 +99,8 @@ public class Human extends Player {
         if(validMoveSelected) {
             Log.d("myTag", "User Played " + tileToPlay.toString() + " on the " + trainToPlay + " train.");
             humanPlayer.playerHand.removeTile(tileToPlay.getFirstNum(), tileToPlay.getSecondNum());
+            //add train user played on to arraylist of trains
+            currentTrainsPlayed.add(Character.toString( trainToPlay));
             if(humanPlayer.getHand().getSize() == 0) {
                 Log.d("myTag", "Human Player Turn Done");
                 return computerPlayer.sumOfPips();

@@ -61,10 +61,3 @@ public class welcomeScreen extends Activity {
         });
     }
 }
-/*
-    private int roundNumber;
-    private int humanScore;
-    private int computerScore;
-    private Round round ;
-    private Activity activity;
- */
