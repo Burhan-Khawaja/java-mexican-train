@@ -2,7 +2,7 @@ package com.example.mexicantrain;
 
 public class Tile {
 
-    //class variables
+    //store number that represent a tile
     private int firstNum;
     private int secondNum;
 
