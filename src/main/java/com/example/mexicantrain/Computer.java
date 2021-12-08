@@ -1,30 +1,51 @@
 package com.example.mexicantrain;
 
 import android.app.Activity;
-import android.util.Log;
 
 import java.util.ArrayList;
 
-public class Computer extends Player{
+public class Computer extends Player {
 
+    /**
+     * constructor for computer player
+     * @param activity unused parameter because we switched to MVC so models dont chagne the view
+     *                 remove this later
+     */
     Computer(Activity activity) {
         this.activity = activity;
     }
 
+    /**
+     * This function will handle the steps and rules for when a computer player plays a turn
+     * @param humanPlayer stores data for human player
+     * @param computerPlayer stores data for computer player
+     * @param mexicanTrain stores data for mexican train
+     * @param boneyard stores tiles in the boneyard
+     * @param tileToPlay tile the user wants to play
+     * @param trainToPlay train the user is attempting to play
+     * @return integer value that is either a negative error code, 0 meaning the turn is complete, or a positive number
+     *          that represents the pips of the human players hand if the computer wins
+     */
     @Override
     int play(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand boneyard, Tile tileToPlay, char trainToPlay) {
 
+        //create 2 arraylists, 1 which holds the best tiles to play
+        //the second one holds the corresponding trains to play on
         ArrayList<Tile> bestTilesToPlay = new ArrayList<Tile>();
         ArrayList<String> trainsToPlayOn = new ArrayList<String>();
 
-        //BURBUR need to set playable trains.
+        //set the computers playable trains
+        // check for any orphan doubles, and if there are set only those playable..
         if(checkOrphanDoubles(humanPlayer,computerPlayer,mexicanTrain) == false) {
             this.computerTrainPlayable = true;
             this.humanTrainPlayable = humanPlayer.getTrainMarker();
             this.mexicanTrainPlayable = true;
         }
+
         //check for valid move
         boolean computerHasValidMove = existsValidMove(humanPlayer, computerPlayer, mexicanTrain);
+        //if the computer does not have a valid move, undergo the procedure for a player not
+        //having a valid move.
         if(!computerHasValidMove) {
             setStringMoveExplanation("Computer has no valid move. ");
             boolean skipTurn = noPlayableTiles(humanPlayer,computerPlayer,mexicanTrain,boneyard);
@@ -41,6 +62,7 @@ public class Computer extends Player{
 
         //find best move for computer
         findBestMove(humanPlayer,computerPlayer,mexicanTrain, boneyard,bestTilesToPlay,trainsToPlayOn);
+        //store the reasoning for why the move was chosen in cpuMoveExplanation.
         String cpuMoveExplanation = interpretBestMove(bestTilesToPlay, trainsToPlayOn);
         this.setStringMoveExplanation(cpuMoveExplanation);
         if(!bestTilesToPlay.isEmpty()) {
@@ -69,15 +91,17 @@ public class Computer extends Player{
                         mexicanTrain.setOrphanDouble(false);
                     }
                 }
+                //remove played tiles from computers hand
                 computerPlayer.playerHand.removeTile(bestTilesToPlay.get(i).getFirstNum(), bestTilesToPlay.get(i).getSecondNum());
                 if(computerPlayer.playerHand.getSize() == 0) {
-                    //BURBUR GAME IS WON HERE.
+                    //if computer hand is empty then the game is over
                     return humanPlayer.sumOfPips();
                 }
             }
         }
 
 
+        //Check for orphan doubles below.
 
         //user played 2 tiles, so theres a chance that there is 1 orphan double.
         if (trainsToPlayOn.size() >= 2) {
@@ -110,8 +134,6 @@ public class Computer extends Player{
             }
 
         }
-
-        Log.d("myTag", "computer turn finished.");
         return 0;
     }
 }
