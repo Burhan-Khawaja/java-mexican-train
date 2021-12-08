@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class Computer extends Player{
+public class Computer extends Player {
 
     Computer(Activity activity) {
         this.activity = activity;

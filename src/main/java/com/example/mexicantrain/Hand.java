@@ -4,12 +4,12 @@ package com.example.mexicantrain;
 import java.util.ArrayList;
 
 public class Hand {
-    //ArrayList that stores an array of tiles that is the users hand
+    //ArrayList that stores a list of tiles
     private ArrayList<Tile> hand = new ArrayList<>();
 
     /**
      Add a tile to the players hand
-     @param Tile tileToAdd - Tile object that gets added to the hand
+     @param tileToAdd - Tile object that gets added to the hand
      */
     public void addTile(Tile tileToAdd) {
         hand.add(tileToAdd);
@@ -25,7 +25,7 @@ public class Hand {
 
     /**
      * Get a tile from the players hand at a specified index
-     * @param index
+     * @param index index of hand we acess
      * @return Tile returns tile that is at position in hand
      */
     public Tile getTile(int index) {
@@ -34,15 +34,6 @@ public class Hand {
             return new Tile(-1,-1);
         }
         return hand.get(index);
-    }
-
-    /**BURBUR not used
-     * Access an index of our hand and change the tile present to a tile that is passed in
-     * @param newTile Tile object that will replace the index
-     * @param index Integer value that is the index we access.
-     */
-    public void changeTileAtIndex(Tile newTile,int index) {
-
     }
 
     /**
@@ -55,7 +46,7 @@ public class Hand {
 
         //find index of Tile
         for(int i = 0; i < hand.size(); i++) {
-            //since we occasionaly swap tiles to fit on the train we have to check
+            //since we swap tiles to fit on the train we have to check
             //if the tile at index's first number is equal to value 1 and value 2 since it might be swapped.
             //if hand[i].firstnumber = value1, and hand[i].secondnumber = value 2, remove it
             if(hand.get(i).getFirstNum() == value1 && hand.get(i).getSecondNum() == value2  ) {
@@ -76,6 +67,10 @@ public class Hand {
         return this.hand;
     }
 
+    /**
+     * Represent the players hand as a properly formatted string, used for serialization
+     * @return String that represents all the tiles in a players hand represented as they are in serialization files.
+     */
     public String handAsString() {
         String handString = "";
         for(int i = 0; i < hand.size(); i++) {

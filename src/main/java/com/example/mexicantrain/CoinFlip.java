@@ -13,12 +13,17 @@ import java.util.Random;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+/**
+ * view shown when a user starts a game/ tie in score and a coin is flipped to determine who goes first
+ */
 public class CoinFlip extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.coin_flip);
 
+        //generate random number 0 or 1
+        //0 = heads, 1 = tails.
         Random rng = new Random();
         int randomNum = rng.nextInt(2);
 
@@ -34,6 +39,7 @@ public class CoinFlip extends Activity {
         headsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d("myTag", "Test");
+                //if randomNum is 0 then heads wins
                 if(randomNum == 0) {
                     coinPicture.setImageResource(R.drawable.coin_heads);
                     //set human turn to 1 in the intent, meaning true
@@ -56,6 +62,7 @@ public class CoinFlip extends Activity {
         tailsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Log.d("myTag", "Test");
+                //if randomNum is 0 then tails loses and heads wins.
                 if(randomNum == 0) {
                     coinPicture.setImageResource(R.drawable.coin_heads);
                     //set human turn to 1 in the intent, meaning true
@@ -78,13 +85,17 @@ public class CoinFlip extends Activity {
 
     }
 
+    /**
+     * make the user tap anywhere to continue to next screen to continue instead of going instantly
+     */
     private void tapAnywhereToContinue() {
+        //get the entire constaintLayout, and set an onclicklistener
+        // that will call finish() and return the intent
         ConstraintLayout coinFlipLayout = (ConstraintLayout) findViewById(R.id.coinFlipLayout);
         coinFlipLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-                return;
             }
         });
     }

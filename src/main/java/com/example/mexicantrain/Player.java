@@ -17,10 +17,18 @@ public abstract class Player {
     //this will be used so we can output to the screen what the player did.
     protected String moveExplanation = " ";
 
+    /**
+     * Return a players hand as a Hand object
+     * @return Hand that has all the tiles in a players possession.
+     */
     public Hand getHand() {
         return this.playerHand;
     }
 
+    /**
+     * Get a players hand as an arrayList, used for serialization
+     * @return ArrayList<Tile> stores all the tiles in a players hand.
+     */
     public ArrayList<Tile> getHandArrayList() {
         return this.playerHand.getHandArrayList();
     }
@@ -34,9 +42,13 @@ public abstract class Player {
         playerHand.addTile(tileToAdd);
     }
 
+    /**
+     * set a trains marker to true
+     */
     public void setTrainMarker() {
         this.playerTrain.setMarker(true);
     }
+
     /**
      * set the member variable activity so we can access gui
      * @param _activity Activity object
@@ -56,20 +68,48 @@ public abstract class Player {
         return false;
     }
 
+    /**
+     * returns a train as a string so we an display it
+     * @return String object that represents a train
+     */
     public String trainAsString(){
         return playerTrain.trainAsString();
     }
 
+    /**
+     * Add a tile to the front of a players train
+     * @param tileToAdd tile that the user wants to add
+     */
     public void addTileFront(Tile tileToAdd) {
         playerTrain.addTileFront(tileToAdd);
     }
 
+    /**
+     * Add a tile to the back of the players train
+     * @param tileToAdd tile the user wants to add
+     */
     public void addTileBack(Tile tileToAdd) {
         playerTrain.addTileBack(tileToAdd);
     }
 
+    /**
+     * procedure that plays a turn. reimplemented in human/computer class
+     * @param humanPlayer stores data for human player
+     * @param computerPlayer stores data for computer player
+     * @param mexicanTrain stores data for mexican train
+     * @param Boneyard stores hand that is the boneyard
+     * @param tileToPlay tile the user wants to play
+     * @param trainToPlay train the user is attempting to play
+     * @return integer value that represents either the sum of pips of the loser, or an error code or 0 if next players turn
+     */
     abstract int play(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand Boneyard, Tile tileToPlay, char trainToPlay);
 
+    /**
+     * check if a tile fits on a train
+     * @param tileToCheck The tile that is trying to be added to a train
+     * @param trainEndNumber The number on the train a tile must match to fit on the train
+     * @return boolean true if tile fits on train, false if it does not
+     */
     public boolean tileFitsOnTrain(Tile tileToCheck, int trainEndNumber) {
         if(tileToCheck.getFirstNum() == trainEndNumber) {
             return true;
@@ -79,10 +119,22 @@ public abstract class Player {
         }
         return false;
     }
+
+    /**
+     * Get the end number of a train, which is the number tiles must match to be added to the train
+     * @return integer that is the hanging number on a train
+     */
     public int getTrainEndNumber() {
         return this.playerTrain.getTrainEndNumber();
     }
 
+    /**
+     * Check if a player has a valid move
+     * @param humanPlayer stores human player data and its train
+     * @param computerPlayer stores computer player data and its train
+     * @param mexicanTrain stores mexican train data
+     * @return boolean, true if player has a move false otherwise
+     */
     public boolean existsValidMove(Player humanPlayer, Player computerPlayer, Train mexicanTrain) {
         boolean validMove = false;
 
@@ -100,6 +152,11 @@ public abstract class Player {
         return validMove;
     }
 
+    /**
+     * Check if a player has a move on a certain train
+     * @param trainEndNumber the number that represents the end number on a train a tile has to match to fit on it.
+     * @return boolean true if the player has a move false otherwise.
+     */
     public boolean playerHasMove(int trainEndNumber) {
         for(int i = 0; i < playerHand.getSize(); i++) {
             if(playerHand.getTile(i).getFirstNum() == trainEndNumber) {
@@ -112,6 +169,14 @@ public abstract class Player {
         return false;
     }
 
+    /**
+     * Function that deals with procedure of having no playable tiles.
+     * @param humanPlayer stores human player data
+     * @param computerPlayer stores computer player data
+     * @param mexicanTrain stores mexican train data
+     * @param boneyard stores boneyard data
+     * @return boolean value, true if drawn tile is playable, false otherwise.
+     */
     boolean noPlayableTiles(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand boneyard) {
         if(boneyard.getSize() == 0) {
             //BURBUR add error message that boneyard is empty and a marker is placed on the train
@@ -135,7 +200,6 @@ public abstract class Player {
                 setStringMoveExplanation(" There is no valid move after taking the tile " + boneyardTile.tileAsString() + " ");
                 setStringMoveExplanation("from the boneyard.\n A marker has been placed on your train");
                 Log.d("myTag", "USER HAS NO VALID MOVE AFTER TAKING TILE FROM BONEYARD");
-                //BURBUR set train marker here
                 return false;
 
             }
@@ -147,6 +211,15 @@ public abstract class Player {
         }
     }
 
+    /**
+     * check for any existing orphan doubles, and if they exist set those trains only as playable.
+     * @param humanPlayer stores human players information
+     * @param computerPlayer stores computer players information
+     * @param mexicanTrain stores tiles on mexican train
+     * @return Boolean value that is true if there exists orphan doubles, false otherwise.
+     * @algorithm 1- Check if there exists an orphan double on a train
+     *            2- If it does, set all trains to unplayable. Then set each train with an orphan double as playable
+     */
     boolean checkOrphanDoubles(Player humanPlayer, Player computerPlayer, Train mexicanTrain)
     {
         boolean orphanDouble = false;
@@ -177,26 +250,36 @@ public abstract class Player {
         return orphanDouble;
     }
 
+    /**
+     * check if a players choice of train is playable
+     * @param userTrainChoice character that represents the train to play on
+     * @return
+     */
     public boolean checkUserTrainPlayable(char userTrainChoice) {
         if (userTrainChoice == 'h' && !this.humanTrainPlayable) {
-        //    std::cout << "Error: You are not allowed to play on the human train.";
             return false;
         }
         else if (userTrainChoice == 'c' && !this.computerTrainPlayable) {
-        //    std::cout << "Error: You are not allowed to play on the computer train";
             return false;
         }
         else if (userTrainChoice == 'm' && !this.mexicanTrainPlayable) {
-        //    std::cout << "Error: You are not allowed to play on the Mexican Train";
             return false;
         }
         return true;
     }
 
+    /**
+     * Get a player trains marker
+     * @return boolean value, true if train is marked false otherwise.
+     */
     public boolean getTrainMarker() {
         return this.playerTrain.getMarker();
     }
 
+    /**
+     * Sum all the pips left in a players hand
+     * @return integer value that is the sum of pips in hand
+     */
     public int sumOfPips() {
         //total will hold the sum of the pips in the hand
         int total = 0;
@@ -209,11 +292,40 @@ public abstract class Player {
         return total;
     }
 
+    /**
+     * Find the best move a player can make
+     * @param humanPlayer - Human object that stores everything about the human
+     * @param computerPlayer - Computer object that stores everything about the computer
+     * @param mexicanTrain - Mexican train that stores all tiles on mexican train
+     * @param boneyard - Hand object that stores the boneyard
+     * @param bestTiles - ArrayList of tiles that stores what tiles should be played, empty when passed in
+     * @param trains - ArrayList of Strings that represent the
+     *                 corresponding trains to play the tiles on, also empty when passed in
+     * @algorithm 0-create 3 vector of Tiles that store what tiles we can play on mexican, human, and computer train,
+     *                 and 3 more vectors of Tiles that store the doubles we can play
+     *              1-Create new hand, tempPlayerHand that we store players hand into so we can manipulate it
+     *              2-Store player hand in tempPlayerHand
+     *              3-while true
+     *                 3a- if mexican train is playable, get all the playable tiles on that train and place them into mexicanPlayableTiles vector
+     *                 3b- if computer train is playable, get all the playable tiles on that train and place them into computerPlayableTiles vector
+     *                 3c- if human train is playable, get all the playable tiles on that train and place them into humanPlayableTiles vector
+     *                 3d- store all the doubles into their respective doubles vector
+     *                 3e- If we can play on the mexican train, and the mexicanDoubles vector isnt empty, and we have played less then 2 doubles,
+     *                     add the first double to bestTiles vector. remove the tile from out temporary hand, and restart from step 3.
+     *                 3f- If we can play on the human train, and the mexicanDoubles vector isnt empty, and we have played less then 2 doubles,
+     *                     add the first double to bestTiles vector. remove the tile from out temporary hand, and restart from step 3.
+     *                 3g- If we can play on the computer train, and the mexicanDoubles vector isnt empty, and we have played less then 2 doubles,
+     *                     add the first double to bestTiles vector. remove the tile from out temporary hand, and restart from step 3.
+     *                 3h- Repeat steps 3e -3g, except this time for the vector that stores the non double tiles.
+     *                 3i- If we play a tile that is not a double, return from the function
+     *                 3j- when we have played a non double tile, or have played 3 tiles return from the function.
+     */
     public void findBestMove(Player humanPlayer, Player computerPlayer, Train mexicanTrain, Hand boneyard, ArrayList<Tile> bestTiles, ArrayList<String> trains){
         boolean turnFinished = false;
         //stores what tiles the computer will play. either 1 single tile, a double and a non doubl, or 2 doubles and a non double.
 
         ArrayList<Tile> tilesPlayed = new ArrayList<Tile>();
+        //stores what tiles can be played on the mexican, human, or computer trains
         ArrayList<Tile> mexicanPlayableTiles= new ArrayList<Tile>();
         ArrayList<Tile> humanPlayableTiles= new ArrayList<Tile>();
         ArrayList<Tile> computerPlayableTiles= new ArrayList<Tile>();
@@ -223,12 +335,14 @@ public abstract class Player {
         ArrayList<Tile> humanDoubles= new ArrayList<Tile>();
         ArrayList<Tile> computerDoubles= new ArrayList<Tile>();
         ArrayList<Tile> tmpVector = this.getHandArrayList();
+        //Create temporary hand that is a copy of player hand so we can freely manipulate it
         Hand tempPlayerHand = new Hand();
         for (int i = 0; i < tmpVector.size(); i++) {
             tempPlayerHand.addTile(tmpVector.get(i));
         }
+        //track doubles played, b/c we can only play 2 doubles
         int doublesPlayed = 0;
-        do{
+        do {
             //clear all vectors of playable tiles.
             mexicanPlayableTiles.clear();
             humanPlayableTiles.clear();
@@ -335,11 +449,23 @@ public abstract class Player {
         } while(turnFinished == false);
     }
 
+    /**
+     * Get the playable tiles a user can play on a train, based on the end number of that train
+     * @param playerHand A players hand that contains all the tile
+     * @param trainEndNumber The last number on a train a tile must match to fit
+     * @return ArrayList<Tile> that is all playable tiles on a train
+     */
     public ArrayList<Tile> getPlayableTiles(ArrayList<Tile> playerHand, int trainEndNumber) {
+        /*
+         Algorithm: 1)Loop through playerHand
+            2)if the tile's first number is equal to the trains end number, add the tile to vector we return
+            3)else if the tile's second number is equal to the trains end number, add the tile to vector we return
+            4)once we have looped through the entire hand, return the vector of playable tiles.
+         */
         ArrayList<Tile> playableTiles = new ArrayList<Tile>();
+        //1)Loop through playerHand
         for (int i = 0; i < playerHand.size(); i++) {
             //2)if the tile's first number is equal to the trains end number, add the tile to vector we return
-
             if (playerHand.get(i).getFirstNum() == trainEndNumber) {
                 playableTiles.add(new Tile (playerHand.get(i).getFirstNum(), playerHand.get(i).getSecondNum() ) );
             }
@@ -351,8 +477,14 @@ public abstract class Player {
         return playableTiles;
     }
 
+    /**
+     * Interpret the best move found by the computer
+     * @param bestTiles arrayList of tiles that the computer thought would be best to play
+     * @param trains ArrayList of the corresponding trains to play those tiles on
+     * @return String that is the reasoning for why to play those tiles on those trains
+     */
     public String interpretBestMove(ArrayList<Tile> bestTiles, ArrayList<String> trains) {
-        String explanation = new String();
+        String explanation = "";
 
         //if bestTiles is empty,meaning we have no move then just return
         if(bestTiles.isEmpty()) {
@@ -396,41 +528,64 @@ public abstract class Player {
         return explanation;
     }
 
+    /**
+     * Clear the marker on a players train
+     */
     protected void clearTrainMarker() {
         this.playerTrain.clearTrainMarker();
     }
 
+    /**
+     * Get the orphan double of a train
+     * @return Boolean value, true if there is an orphan double false otherwise
+     */
     public boolean getOrphanDouble() {
         return this.playerTrain.getOrphanDouble();
     }
 
+    /**
+     * Set a player trains end number that a tile must match to fit on the train
+     * @param newEndNumber integer value that is the new end number for a train
+     */
     public void setTrainEndNumber(int newEndNumber){
         this.playerTrain.setTrainEndNumber(newEndNumber);
     }
 
+    /**
+     * set a players orphan double to a value
+     * @param value Boolean value that is what we are setting the orphan double to
+     */
     public void setOrphanDouble(boolean value) {
         playerTrain.setOrphanDouble(value);
     }
 
-    public void clearOrphanDouble() {
-
-    }
+    /**
+     * append to a players stringMoveExplanation a string passed in
+     * @param s String that is passed in that we append to what the user did for their turn
+     */
     public void setStringMoveExplanation(String s) {
         this.moveExplanation += s;
     }
 
-    public void resetStringMoveExplanation() {
-        this.moveExplanation = "";
-    }
-
+    /**
+     * Get a players move explanation, which is what they did in a turn
+     * @return String that is a representation of the tiles played on the trains / what errors occurred
+     */
     public String getMoveExplanation() {
         return this.moveExplanation;
     }
 
+    /**
+     * Clear a players move explanation, aka what they did for a turn
+     */
     public void clearMoveExplanation(){
         this.moveExplanation = "";
     }
 
+    /**
+     * Return a players train as a string, used for serialization
+     * @return String that represents a players train the way it should be for serialization
+     */
     public String getTrainAsString(){
         return playerTrain.trainAsStringSerialization();
     }
